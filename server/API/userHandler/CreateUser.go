@@ -2,7 +2,7 @@
 package userHandler
 
 import (
-	"APIpractice2/server/database"
+	"server/database"
 	"encoding/json"
 	"fmt"
 	"net/http"

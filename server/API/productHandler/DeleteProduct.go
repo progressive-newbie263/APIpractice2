@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"APIpractice2/server/database"
+	"server/database"
 )
 
 // redefine the structure for the product (reuse the existing Product struct from before)

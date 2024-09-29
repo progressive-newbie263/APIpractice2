@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"APIpractice2/server/database"
+	"server/database"
 )
 
 // Function to update an account in the database by user id

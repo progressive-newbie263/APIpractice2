@@ -4,7 +4,7 @@ import (
     "encoding/json"
     "net/http"
     "strings"
-    "APIpractice2/server/database" // Import the database package
+    "server/database" // Import the database package
 )
 
 // SearchProductByIDHandler searches for a product by ID and returns it as JSON

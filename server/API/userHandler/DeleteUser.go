@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"APIpractice2/server/database"
+	"server/database"
 )
 
 // Function to update a product in the database by product name

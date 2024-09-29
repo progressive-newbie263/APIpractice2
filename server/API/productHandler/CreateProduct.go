@@ -1,27 +1,27 @@
-//completed , worked.
+// completed , worked.
 package productHandler
 
 import (
-	"APIpractice2/server/database"
+	"database/sql" //to get sql.NullString type
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"database/sql" //to get sql.NullString type
+	"server/database"
 )
 
 // Define the structure for the product
 type Product struct {
-	ID                  string  				`json:"id"`
-	Image               string  				`json:"image"`
-	Name                string  				`json:"name"`
-	RatingStars         float64 				`json:"ratingstars"`
-	RatingCount         int     				`json:"ratingcount"`
-	PriceCents          int     				`json:"pricecents"`
-	Keywords            string  				`json:"keywords"`
-	Type                string  				`json:"type"`
-	SizeChartLink       sql.NullString  `json:"sizechartlink"`
-	InstructionsLink    sql.NullString  `json:"instructionslink"`
-	WarrantyLink        sql.NullString  `json:"warrantylink"`
+	ID               string         `json:"id"`
+	Image            string         `json:"image"`
+	Name             string         `json:"name"`
+	RatingStars      float64        `json:"ratingstars"`
+	RatingCount      int            `json:"ratingcount"`
+	PriceCents       int            `json:"pricecents"`
+	Keywords         string         `json:"keywords"`
+	Type             string         `json:"type"`
+	SizeChartLink    sql.NullString `json:"sizechartlink"`
+	InstructionsLink sql.NullString `json:"instructionslink"`
+	WarrantyLink     sql.NullString `json:"warrantylink"`
 }
 
 // Function to insert product into the database
@@ -45,17 +45,17 @@ func CreateProduct(product *Product) error {
 	_, err := database.DB.Exec(
 		query,
 		&product.ID,
-		&product.Image,  
+		&product.Image,
 		&product.Name,
 		&product.RatingStars,
 		&product.RatingCount,
-		&product.PriceCents, 
+		&product.PriceCents,
 		&product.Keywords,
 		&product.Type,
 		&product.SizeChartLink,
 		&product.InstructionsLink,
 		&product.WarrantyLink)
-	
+
 	if err != nil {
 		return fmt.Errorf("failed to insert product: %v", err)
 	}
