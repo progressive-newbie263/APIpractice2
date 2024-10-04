@@ -1,6 +1,7 @@
 import {getOrder} from '../data/order.js';
 import {getProduct, loadProductsFetch} from '../data/products.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
+import { calculateCartQuantity } from '../data/cart.js';
 
 async function loadPage() {
   await loadProductsFetch();
@@ -20,6 +21,14 @@ async function loadPage() {
       productDetails = details;
     }
   });
+
+  function updateCartQuantity() {
+    const cartQuantity = calculateCartQuantity();
+
+    document.querySelector('.tracking-cart-quantity').innerHTML = cartQuantity;
+  }
+  
+  updateCartQuantity();
 
   //starting, 18o
   const today = dayjs();
@@ -42,7 +51,9 @@ async function loadPage() {
     <div class="product-info">
       Quantity: ${productDetails.quantity}
     </div>
-    <img class="product-image" src="${product.image}">
+
+    <img class="product-image" src="../${product.image}">
+
     <div class="progress-labels-container">
       <div class="progress-label
         ${percentProgress < 50 ? 'current-status': ''}

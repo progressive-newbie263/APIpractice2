@@ -10,17 +10,6 @@ function saveOrders() {
   localStorage.setItem('orders', JSON.stringify(orders));
 }
 
-// Function to load orders from local storage
-/*
-function loadOrders() {
-  const storedOrders = localStorage.getItem('orders');
-  if (storedOrders) {
-    return JSON.parse(storedOrders);
-  }
-  return orders; // Fall back to default orders if not found in storage
-}
-*/
-
 function deleteOrder() {
   document.querySelectorAll('.js-delete-order-button')
     .forEach((button) => {
@@ -104,7 +93,7 @@ async function loadPage() {
       if (product) { // Ensure product is defined
         productsListHTML += `
           <div class="product-image-container">
-            <img src="${product.image}">
+            <img src="../${product.image}">
           </div>
           <div class="product-details">
             <div class="product-name">
@@ -121,7 +110,7 @@ async function loadPage() {
   
             <button class="buy-again-button button-primary js-buy-again-button"
             data-product-id="${product.id}">
-              <img class="buy-again-icon" src="images/icons/buy-again.png">
+              <img class="buy-again-icon" src="../images/icons/buy-again.png">
               <span class="buy-again-message">Buy it again</span>
             </button>
           </div>
@@ -179,7 +168,7 @@ async function loadPage() {
       button.innerHTML = 'Added';
       setTimeout(() => {
         button.innerHTML = `
-          <img class="buy-again-icon" src="images/icons/buy-again.png">
+          <img class="buy-again-icon" src="../images/icons/buy-again.png">
           <span class="buy-again-message">Buy it again</span>
         `;
       }, 1000);

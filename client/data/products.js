@@ -12,7 +12,6 @@ export function getProduct(productId) {
   return matchingProduct;
 }
 
-//17i: export all classes : Product, appliance, clothing.
 export class Product {
   id;
   image;
@@ -21,6 +20,7 @@ export class Product {
   ratingcount;
   pricecents;
   keywords;
+  type;
 
   constructor(productDetails) {
     this.id = productDetails.id;
@@ -30,6 +30,7 @@ export class Product {
     this.ratingcount = productDetails.ratingcount;
     this.pricecents = productDetails.pricecents;
     this.keywords = productDetails.keywords;
+    //this.type = productDetails.type;
   }
 
   getStarsUrl() {
@@ -46,42 +47,51 @@ export class Product {
 }
 
 //INHERITANCE:
+//size chart:
 export class Clothing extends Product {
-  sizeChartLink;
+  sizechartlink;
 
   constructor(productDetails) {
     super(productDetails); //call the constructor of its parent class
-    this.sizeChartLink = productDetails.sizeChartLink;
+    
+    //hiện tại ở database thì String là địa chỉ còn Valid là khi nó đúng.
+    //trả về địa chỉ kia, nếu tồn tại link image khả dụng. Nếu ko, trả lại empty string
+    this.sizechartlink = productDetails.sizechartlink.String ? `/${productDetails.sizechartlink.String}` : ''; 
   }
 
   //method overriding (this piece of code will overwrite the same code from parent class)
   extraInfoHTML() {
     //super.extraInfoHTML();
+    //console.log('Size Chart Link:', this.sizechartlink); //bugged.
+
     return `
-      <a href="${this.sizeChartLink}" target="_blank">
+      <a href="${this.sizechartlink}" target="_blank">
         Size chart
       </a>
     `
   }
 }
 
+//instructions link and warranty link:
 export class Appliance extends Product {
-  instructionsLink;
-  warrantyLink;
+  instructionslink;
+  warrantylink;
 
   constructor(productDetails) {
     super(productDetails);
-    this.instructionsLink = productDetails.instructionsLink;
-    this.warrantyLink = productDetails.warrantyLink;
+
+    //trả về địa chỉ kia, nếu tồn tại link image khả dụng. Nếu ko, trả lại empty string
+    this.instructionslink = productDetails.instructionslink.String ? `/${productDetails.instructionslink.String}` : '';
+    this.warrantylink = productDetails.warrantylink.String ? `/${productDetails.warrantylink.String}` : '';
   }
 
   extraInfoHTML() {
     return `
-      <a href="${this.instructionsLink}" target="_blank">
+      <a href="${this.instructionslink}" target="_blank">
         Instruction
       </a>
 
-      <a href="${this.warrantyLink}" target="_blank">
+      <a href="${this.warrantylink}" target="_blank">
         Warranty
       </a>
     `

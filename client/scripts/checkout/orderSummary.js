@@ -41,7 +41,7 @@ export function renderOrderSummary() {
   
       <div class="cart-item-details-grid">
         <img class="product-image"
-          src="${matchingProduct.image}">
+          src="../${matchingProduct.image}">
   
         <div class="cart-item-details">
           <div class="product-name">

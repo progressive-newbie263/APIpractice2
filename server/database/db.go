@@ -7,6 +7,7 @@ import (
     "net/http"
     "encoding/json"
     "fmt"
+    //"strconv"
 )
 
 var DB *sql.DB
@@ -33,6 +34,56 @@ type Product struct {
     SizeChartLink       sql.NullString  `json:"sizechartlink"`
     InstructionsLink    sql.NullString  `json:"instructionslink"`
     WarrantyLink        sql.NullString  `json:"warrantylink"`
+}
+
+//function for searching products via keywords (in amazon.html)
+func SearchProducts(query string) ([]Product, error) {
+    query = "%" + query + "%"
+    sqlQuery := `
+        SELECT 
+            id, 
+            image, 
+            name, 
+            ratingstars, 
+            ratingcount, 
+            pricecents, 
+            keywords, 
+            type, 
+            sizechartlink, 
+            instructionslink, 
+            warrantylink 
+        FROM products
+        WHERE keywords ILIKE $1
+    `
+    rows, err := DB.Query(sqlQuery, query)
+    if err != nil {
+        return nil, err
+    }
+    defer rows.Close()
+
+    var products []Product
+    for rows.Next() {
+        var product Product
+        err := rows.Scan(
+            &product.ID, 
+            &product.Image, 
+            &product.Name, 
+            &product.RatingStars, 
+            &product.RatingCount, 
+            &product.PriceCents, 
+            &product.Keywords, 
+            &product.Type,
+            &product.SizeChartLink, 
+            &product.InstructionsLink, 
+            &product.WarrantyLink,
+        )
+        if err != nil {
+            return nil, err
+        }
+        products = append(products, product)
+    }
+
+    return products, nil
 }
 
 
@@ -210,3 +261,63 @@ func SearchUserByID(userID int) (*User, error) {
 
     return &user, nil
 }
+
+
+/*
+    paging handler (this one is used for creating 
+    a counting list that only shows a certain amount of
+    products for each pages/counting numbers)
+*/
+// func GetPaginatedProducts(w http.ResponseWriter, r *http.Request) {
+//     // Get page number from query parameters
+//     page := r.URL.Query().Get("page")
+//     if page == "" {
+//         page = "1"
+//     }
+
+//     // Convert page to integer
+//     pageNum, err := strconv.Atoi(page)
+//     if err != nil {
+//         http.Error(w, "Invalid page number", http.StatusBadRequest)
+//         return
+//     }
+
+//     // Number of products per page
+//     pageSize := 10
+//     offset := (pageNum - 1) * pageSize
+
+//     // Fetch products with pagination
+//     query := `SELECT * FROM products LIMIT $1 OFFSET $2`
+//     rows, err := DB.Query(query, pageSize, offset)
+//     if err != nil {
+//         http.Error(w, "Error fetching products", http.StatusInternalServerError)
+//         return
+//     }
+//     defer rows.Close()
+
+//     // Process products and send response
+//     var products []Product
+//     for rows.Next() {
+//         var product Product
+//         err := rows.Scan(
+//             &product.ID,
+//             &product.Image,  
+//             &product.Name,
+//             &product.RatingStars,
+//             &product.RatingCount,
+//             &product.PriceCents, 
+//             &product.Keywords,
+//             &product.Type,
+//             &product.SizeChartLink,
+//             &product.InstructionsLink,
+//             &product.WarrantyLink, 
+//         )
+//         if err != nil {
+//             http.Error(w, "Error scanning product", http.StatusInternalServerError)
+//             return
+//         }
+//         products = append(products, product)
+//     }
+
+//     json.NewEncoder(w).Encode(products)
+// }

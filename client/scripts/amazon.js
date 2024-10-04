@@ -1,39 +1,27 @@
 import { cart, addToCart, calculateCartQuantity } from "../data/cart.js";
-import { products, loadProducts, loadProductsFetch } from "../data/products.js";
+
+import {
+  products, 
+  loadProducts, 
+  loadProductsFetch,  
+} from "../data/products.js";
+
 import { formatCurrency } from './utils/money.js';
 
-//loadProducts(renderProductsGrid);
+//unused fetch load.
+//loadProductsFetch(renderProductsGrid);
 loadProducts(renderProductsGrid);
 
-function renderProductsGrid() {
+function renderProductsGrid(filteredProducts) {
   let productsHTML = '';
 
-  const url = new URL(window.location.href);
-  const search = url.searchParams.get('search');
+  const productsToRender = filteredProducts || products;
 
-  let filteredProducts = products;
-
-  // If a search exists in the URL parameters, filter the products that match the search.
-  if (search) {
-    filteredProducts = products.filter((product) => {
-      let matchingKeyword = false;
-
-      product.keywords.forEach((keyword) => {
-        if(keyword.toLowerCase().includes(search.toLowerCase())) {
-          matchingKeyword = true;
-        }
-      }); 
-
-      return matchingKeyword || product.name.toLowerCase().includes(search.toLowerCase());
-    });
-  }
-
-  filteredProducts.forEach((product) => {
+  productsToRender.forEach((product) => {
     productsHTML += `
       <div class="product-container">
       <div class="product-image-container">
-        <img class="product-image"
-          src="${product.image}">
+        <img class="product-image" src="../${product.image}">
       </div>
 
       <div class="product-name limit-text-to-2-lines">
@@ -41,8 +29,8 @@ function renderProductsGrid() {
       </div>
 
       <div class="product-rating-container">
-        <img class="product-rating-stars"
-          src="${product.getStarsUrl()}">
+        <img class="product-rating-stars" src="../${product.getStarsUrl()}">
+        
         <div class="product-rating-count link-primary">
           ${product.ratingcount}
         </div>
@@ -72,7 +60,7 @@ function renderProductsGrid() {
       <div class="product-spacer"></div>
 
       <div class="added-to-cart js-added-to-cart-${product.id}">
-        <img src="images/icons/checkmark.png">
+        <img src="../images/icons/checkmark.png">
         Added
       </div>
 
@@ -83,23 +71,17 @@ function renderProductsGrid() {
       </button>
     </div>
     `;
-  }); 
+  });
 
-  document.querySelector('.js-products-grid')
-    .innerHTML = productsHTML;
+  document.querySelector('.js-products-grid').innerHTML = productsHTML;
 
   function updateCartQuantity() {
     const cartQuantity = calculateCartQuantity();
-
-    document.querySelector('.js-cart-quantity')
-      .innerHTML = cartQuantity;
-  }
-  //14d
+    document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
+  }  
   updateCartQuantity();
 
-
   let addedMessageTimeouts = {};
-  //13ijklm
   function showingMessage(productId) {
     const addedMessage = document.querySelector(`.js-added-to-cart-${productId}`);
     addedMessage.classList.add('unhidden');
@@ -138,14 +120,28 @@ function renderProductsGrid() {
 }
 
 
-//18p function/ search util
 function searchForProductClick() {
-  //fix later: //amazon.html?search=_${}
-  document.querySelector('.js-search-button')
-    .addEventListener('click', () => {
-      const search = document.querySelector('.js-search-bar').value;
-      window.location.href = `amazon.html?search=${search}`;
-    });
+  document.querySelector('.js-search-button').addEventListener('click', () => {
+    const search = document.querySelector('.js-search-bar').value.toLowerCase();
+
+    fetch(`http://localhost:8082/products`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(products => {
+        const filteredProducts = products.filter(product =>
+          product.keywords.toLowerCase().includes(search) || 
+          product.name.toLowerCase().includes(search)
+        );
+        renderProductsGrid(filteredProducts); // Render filtered products
+      })
+      .catch(error => {
+        console.error('Error fetching products:', error);
+      });
+  });
 }
 
 function searchForProductEnter() {
