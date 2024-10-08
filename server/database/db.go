@@ -274,7 +274,7 @@ func SearchUserByID(userID int) (*User, error) {
 //     if page == "" {
 //         page = "1"
 //     }
-
+/*
 //     // Convert page to integer
 //     pageNum, err := strconv.Atoi(page)
 //     if err != nil {
@@ -321,3 +321,4 @@ func SearchUserByID(userID int) (*User, error) {
 
 //     json.NewEncoder(w).Encode(products)
 // }
+*/

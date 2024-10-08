@@ -3,7 +3,10 @@ import { cart, addToCart, calculateCartQuantity } from "../data/cart.js";
 import {
   products, 
   loadProducts, 
-  loadProductsFetch,  
+  loadProductsFetch,
+  Product,
+  Clothing,
+  Appliance,
 } from "../data/products.js";
 
 import { formatCurrency } from './utils/money.js';
@@ -135,7 +138,17 @@ function searchForProductClick() {
         const filteredProducts = products.filter(product =>
           product.keywords.toLowerCase().includes(search) || 
           product.name.toLowerCase().includes(search)
-        );
+        )
+        .map(productDetails => {
+          // Ensure the product is wrapped in the appropriate class
+          if (productDetails.type === 'clothing') {
+            return new Clothing(productDetails);
+          } else if (productDetails.type === 'appliance') {
+            return new Appliance(productDetails);
+          } else {
+            return new Product(productDetails);
+          }
+        });
         renderProductsGrid(filteredProducts); // Render filtered products
       })
       .catch(error => {
@@ -147,10 +160,35 @@ function searchForProductClick() {
 function searchForProductEnter() {
   document.querySelector('.js-search-bar') // Attach the listener to the search bar, must be done.
     .addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        const search = document.querySelector('.js-search-bar').value;
-        window.location.href = `amazon.html?search=${search}`;
-      }
+      const search = document.querySelector('.js-search-bar').value.toLowerCase();
+
+    fetch(`http://localhost:8082/products`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(products => {
+        const filteredProducts = products.filter(product =>
+          product.keywords.toLowerCase().includes(search) || 
+          product.name.toLowerCase().includes(search)
+        )
+        .map(productDetails => {
+          // Ensure the product is wrapped in the appropriate class
+          if (productDetails.type === 'clothing') {
+            return new Clothing(productDetails);
+          } else if (productDetails.type === 'appliance') {
+            return new Appliance(productDetails);
+          } else {
+            return new Product(productDetails);
+          }
+        });
+        renderProductsGrid(filteredProducts); // Render filtered products
+      })
+      .catch(error => {
+        console.error('Error fetching products:', error);
+      });
     });
 }
 
