@@ -188,10 +188,10 @@ func SearchProductByID(productID string) (*Product, error) {
 //queries for users TABLE:
 type User struct {
     ID          int     `json:"id"`
-    Email       string  `json:"image"`
-    Password    string  `json:"name"`
-    FirstName   string  `json:"first_name"`
-    LastName    string  `json:"last_name"`
+    Name 		string	`json:"name"`
+    Email       string  `json:"email"`
+    Password 	[]byte	`json:"password"`
+    Role        string `json:"role"`
 }
 
 func GetUsersHandler(w http.ResponseWriter, r *http.Request) {
@@ -200,8 +200,7 @@ func GetUsersHandler(w http.ResponseWriter, r *http.Request) {
             id,
             email,  
             password,
-            first_name,
-            last_name
+            name
         FROM users
     `)
     if err != nil {
@@ -217,8 +216,7 @@ func GetUsersHandler(w http.ResponseWriter, r *http.Request) {
             &user.ID,
             &user.Email,  
             &user.Password,
-            &user.FirstName,
-            &user.LastName, 
+            &user.Name, 
         )
         if err != nil {
             http.Error(w, "Failed to scan row", http.StatusInternalServerError)
@@ -241,16 +239,14 @@ func SearchUserByID(userID int) (*User, error) {
         id,
         email,  
         password,
-        first_name,
-        last_name 
+        name
     FROM products WHERE id = $1`
 
     err := DB.QueryRow(query, userID).Scan(
         &user.ID,
         &user.Email,  
         &user.Password,
-        &user.FirstName,
-        &user.LastName,  
+        &user.Name, 
     )
     if err != nil {
         if err == sql.ErrNoRows {

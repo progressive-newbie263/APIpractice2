@@ -2,8 +2,8 @@ package main
 
 import (
 	"log"
-	"net/http"
 	"mime"
+	"net/http"
 
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
@@ -12,6 +12,7 @@ import (
 	"server/API/adminHandler"
 	"server/API/productHandler"
 	"server/API/userHandler"
+	"server/controllers"
 	"server/database"
 
 	//"server/middleware"
@@ -28,8 +29,8 @@ func handleRequests() {
 
 	//static (js and css)
 	mime.AddExtensionType(".js", "application/javascript")
-
 	mime.AddExtensionType(".css", "text/css")
+	
 	//mime errors handler for images.
 	mime.AddExtensionType(".jpg", "image/jpg")
 	mime.AddExtensionType(".jpeg", "image/jpeg")
@@ -52,18 +53,30 @@ func handleRequests() {
 	myRouter.HandleFunc("/products", productHandler.UpdateProductHandler).Methods("PUT")		//updating an existing product, finished successfully
 	myRouter.HandleFunc("/products", productHandler.DeleteProductHandler).Methods("DELETE")	//deleting a product from database
 
-	//users API
+	//users API, test cho vui. Khong su dung doan crud api user nay.
 	myRouter.HandleFunc("/users", database.GetUsersHandler).Methods("GET") //getting all users inside database //done
 	myRouter.HandleFunc("/users", userHandler.CreateUserHandler).Methods("POST") //create a new user. //done
 	myRouter.HandleFunc("/users", userHandler.DeleteUserHandler).Methods("DELETE")	//deleting a product from database // done
 	myRouter.HandleFunc("/users", userHandler.UpdateUserHandler).Methods("PUT")		//updating an user account //done.
 	
+	//login API
+	myRouter.HandleFunc("/api/login", controllers.Login).Methods("POST") 
+	myRouter.HandleFunc("/api/register", controllers.Register).Methods("POST") 
+	myRouter.HandleFunc("/api/user", controllers.User).Methods("GET")	
+	myRouter.HandleFunc("/api/logout", controllers.Logout).Methods("POST")	
+
 	//middleware code which allows connections to database from outer source (?)
 	c := cors.New(cors.Options{
-		AllowedOrigins: []string{"http://127.0.0.1:5500"}, //frontend origin location
+		AllowedOrigins: []string{
+			"http://127.0.0.1:5500", 
+			"http://localhost:8082", 
+			"http://localhost:5500"}, //frontend origin location
+		
 		AllowCredentials: true,
+		
 		//maybe only 'GET' ?
 		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE"},//{"GET"} only  
+		
 		AllowedHeaders: []string{"Authorization", "Content-Type"},
 	})
 

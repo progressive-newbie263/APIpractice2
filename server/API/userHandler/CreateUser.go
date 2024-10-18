@@ -13,8 +13,7 @@ type User struct {
 	ID          int     `json:"id"`
 	Email       string  `json:"image"`
 	Password    string  `json:"name"`
-	FirstName   string  `json:"first_name"`
-	LastName    string  `json:"last_name"`
+	Name   			string  `json:"first_name"`
 }
 
 // Function to insert product into the database
@@ -25,8 +24,7 @@ func CreateUser(user *User) error {
 			id,
 			email,  
 			password,
-			first_name,
-			last_name 
+			name,
 		) VALUES ($1, $2, $3, $4, $5)
 	`
 	_, err := database.DB.Exec(
@@ -34,8 +32,7 @@ func CreateUser(user *User) error {
 		&user.ID,
 		&user.Email,  
 		&user.Password,
-		&user.FirstName,
-		&user.LastName,
+		&user.Name,
 	)
 	
 	if err != nil {

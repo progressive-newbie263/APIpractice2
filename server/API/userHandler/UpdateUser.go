@@ -15,8 +15,7 @@ func UpdateUser(user *User) error {
 		SET
 			email = $2,  
 			password = $3,
-			first_name = $4,
-			last_name = $5 
+			name = $4,
 		WHERE
 			id = $1 
 	`
@@ -26,8 +25,7 @@ func UpdateUser(user *User) error {
 		user.ID,
 		user.Email,  
 		user.Password,
-		user.FirstName,
-		user.LastName,
+		user.Name,
 	)
 	
 	//if not found ? 

@@ -22,14 +22,14 @@ body {
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  width: 300px;
+  width: 350px;
 }
 
 .amazon-logo, .amazon-mobile-logo {
   color: black;
 }
 
-.sign-in-form {
+.sign-in-form, .register-form {
   display: flex;
   flex-direction: column;
 }
@@ -50,7 +50,9 @@ label {
 }
 
 input[type="text"],
-input[type="password"] {
+input[type="password"],
+input[type="email"],
+input[type="text"] {
   margin: 10px 0;
   padding: 10px;
   border: 1px solid #ccc;
@@ -59,7 +61,9 @@ input[type="password"] {
 }
 
 input[type="text"]:focus,
-input[type="password"]:focus {
+input[type="password"]:focus,
+input[type="email"]:focus,
+input[type="text"]:focus {
   border-color: #a75d5d;
   outline: none;
 }
@@ -98,6 +102,7 @@ input[type="password"]:focus {
 }
 
 .TOS-message {
+  text-align: center;
   margin-top: 20px;
   font-size: 13px;
 }
@@ -109,4 +114,8 @@ input[type="password"]:focus {
 
 .blue-underlined:hover {
   text-decoration: underline;
+}
+
+.header-link:hover {
+  border: 1px solid black !important;
 }
