@@ -12,7 +12,10 @@
     <div class="admin-page">
         <!-- Sidebar -->
         <div class="sidebar">
-            <h2 class="sidebar-title">Admin Dashboard</h2>
+            <h2 class="sidebar-title">
+                <a href="/admin" style="text-decoration: none; color: white;">Admin Dashboard</a>
+            </h2>
+            
             <ul class="sidebar-menu">
                 <li><a href="#" onclick="showSection('overview')">Overview</a></li>
 
@@ -28,12 +31,13 @@
                 
                 <li><a href="#" onclick="showSection('orders')">Orders</a></li>
                 
-                <li><a href="#" onclick="logout()">Log Out</a></li>
+                <li><a href="#" onClick="logout();">Log Out</a></li> <!-- onclick="logout()"-->
             </ul>
         </div>
 
         <!-- Main Content -->
         <div class="content">
+            <h1 id="welcome-msg">Welcome, Admin</h2>
             <div id="overview" class="section">
                 <h2>Overview Section</h2>
                 <p>This is the overview section content.</p>

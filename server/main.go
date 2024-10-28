@@ -12,6 +12,7 @@ import (
 	"server/API/adminHandler"
 	"server/API/productHandler"
 	"server/API/userHandler"
+	"server/API/cartHandler"
 	"server/controllers"
 	"server/database"
 
@@ -47,11 +48,11 @@ func handleRequests() {
 	myRouter.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("../admin/static"))))
 
 	//products API
-	myRouter.HandleFunc("/products", database.GetProductsHandler).Methods("GET")
-	myRouter.HandleFunc("/products/{id}", productHandler.SearchProductByIDHandler).Methods("GET")	//getting a specific product via searching its ID, finished successfully
-	myRouter.HandleFunc("/products", productHandler.CreateProductHandler).Methods("POST")		//posting/creating a brand new product, finished successfully
-	myRouter.HandleFunc("/products", productHandler.UpdateProductHandler).Methods("PUT")		//updating an existing product, finished successfully
-	myRouter.HandleFunc("/products", productHandler.DeleteProductHandler).Methods("DELETE")	//deleting a product from database
+	myRouter.HandleFunc("/api/products", database.GetProductsHandler).Methods("GET")
+	myRouter.HandleFunc("/api/products/{id}", productHandler.SearchProductByIDHandler).Methods("GET")	//getting a specific product via searching its ID, finished successfully
+	myRouter.HandleFunc("/api/products", productHandler.CreateProductHandler).Methods("POST")		//posting/creating a brand new product, finished successfully
+	myRouter.HandleFunc("/api/products", productHandler.UpdateProductHandler).Methods("PUT")		//updating an existing product, finished successfully
+	myRouter.HandleFunc("/api/products", productHandler.DeleteProductHandler).Methods("DELETE")	//deleting a product from database
 
 	//users API, test cho vui. Khong su dung doan crud api user nay.
 	myRouter.HandleFunc("/users", database.GetUsersHandler).Methods("GET") //getting all users inside database //done
@@ -63,7 +64,10 @@ func handleRequests() {
 	myRouter.HandleFunc("/api/login", controllers.Login).Methods("POST") 
 	myRouter.HandleFunc("/api/register", controllers.Register).Methods("POST") 
 	myRouter.HandleFunc("/api/user", controllers.User).Methods("GET")	
-	myRouter.HandleFunc("/api/logout", controllers.Logout).Methods("POST")	
+	myRouter.HandleFunc("/api/logout", controllers.Logout).Methods("POST")
+	
+	myRouter.HandleFunc("/api/cart", cartHandler.SaveCartToDatabase).Methods("POST")
+	myRouter.HandleFunc("/api/cart", cartHandler.GetCartFromDatabase).Methods("GET") 
 
 	//middleware code which allows connections to database from outer source (?)
 	c := cors.New(cors.Options{

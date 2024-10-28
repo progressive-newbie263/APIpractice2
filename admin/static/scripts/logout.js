@@ -1,25 +1,19 @@
+// Function to handle logging out
 function logout() {
-  const user = JSON.parse(localStorage.getItem('user'));
-  // Clear the local storage or cookies
-  localStorage.removeItem('user'); // Assuming 'user' is stored in local storage
-
-  // Optionally, clear other session data
-  localStorage.removeItem('orders'); // If there's any other data to clear
-
-  // Send a logout request to the backend (optional if backend session is involved)
-  fetch('/logout', {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json'
-      },
-  })
-  .then(response => {
-      if (response.ok) {
-          // Redirect to the login page
-          window.location.href = 'http://127.0.0.1:5500/client/sign-in.html'; // Assuming login page is `login.html`
-      } else {
-          console.error('Logout failed');
-      }
-  })
-  .catch(error => console.error('Error during logout:', error));
+  // Clear the cookie by setting an expiration date in the past
+  document.cookie = "user=; expires=Fri, 18 Oct 2024 00:00:00 UTC; path=/;";
+  
+  // Optionally call the logout API to end the session on the server
+  fetch('http://localhost:8082/api/logout', {
+    method: 'POST',
+    credentials: 'include',
+  }).then((response) => {
+    if (response.ok) {
+      // Redirect to login page after logout
+      window.location.href = 'http://127.0.0.1:5500/client/sign-in.html';
+    } else {
+      alert('Logout failed');
+    }
+  });
 }
+

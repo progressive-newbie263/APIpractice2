@@ -1,46 +1,56 @@
-document.getElementById('sign-in-form').addEventListener('submit', async function(e) {
-  e.preventDefault(); // Prevent the default form submission
+window.addEventListener('DOMContentLoaded', function () {
+  // Helper function to get cookie value
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  }
 
-  // Get the email and password values
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
+  // Get the 'user' cookie
+  const userCookie = getCookie('user');
+  const user = userCookie ? JSON.parse(userCookie) : null;
 
-  // Make an HTTP POST request to login
-  try {
-      const response = await fetch('http://localhost:8082/api/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        // Remove credentials: 'include' for now
-        body: JSON.stringify({
-            email: email,
-            password: password
-        })
-      });
+  const welcomeMsg = document.getElementById('welcome-msg');
+  const authLink = document.getElementById('auth-link');
 
-      console.log("Response status:", response.status); // Log the status for debugging
+  const accountDropdown = document.getElementById('accountDropdown');
+  const darkOverlay = document.getElementById('darkOverlay');
+  const dropdownContent = accountDropdown.querySelector('.dropdown-content');
+
+  if (user) {
+    if (user.role === 'admin') {
+      window.location.href = 'http://localhost:8082/admin';
+    }
+
+    // User is logged in
+    welcomeMsg.textContent = `Hello, ${user.name}`;
+    authLink.textContent = 'Sign Out'; // Change to 'Sign Out'
+    
+    // Handle Sign Out
+    authLink.addEventListener('click', function () {
+      document.cookie = "user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       
-      // If response is not OK, log the error details
-      if (!response.ok) {
-          const errorData = await response.text(); // Capture error as text (if provided)
-          console.log("Error details:", errorData);
-          alert('Login failed: ' + errorData);
-          return;
-      }
+      // Optionally, you can call the logout API as well
+      fetch('http://localhost:8082/api/logout', {
+        method: 'POST',
+        credentials: 'include',
+      })
+      .then((response) => {
+        if (response.ok) {
+          location.reload(); // Reload the page after logout
+        } else {
+          alert('Logout failed');
+        }
+      });
+    });
+  } else {
+    // User is not logged in
+    welcomeMsg.textContent = `Hello, Sign in`;
+    authLink.textContent = 'Sign In'; // Change to 'Sign In'
 
-      // Parse the JSON response if login is successful
-      const returnAccount = await response.json();
-      console.log("Account data:", returnAccount);
-
-      // Store the account name in localStorage
-      localStorage.setItem('name', returnAccount.name);
-
-      // Redirect to the homepage
-      window.location.href = './amazon.html';
-
-  } catch (error) {
-      console.error('Error during login:', error);
-      alert('An error occurred. Please try again.');
+    // Handle Sign In
+    authLink.addEventListener('click', function () {
+      window.location.href = './sign-in.html'; // Redirect to the login page
+    });
   }
 });

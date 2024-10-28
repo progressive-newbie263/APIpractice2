@@ -9,8 +9,6 @@ import {
   Appliance,
 } from "../data/products.js";
 
-//unused fetch load.
-//loadProductsFetch(renderProductsGrid);
 loadProducts(renderProductsGrid);
 
 function renderProductsGrid(filteredProducts) {
@@ -125,7 +123,7 @@ function searchForProductClick() {
   document.querySelector('.js-search-button').addEventListener('click', () => {
     const search = document.querySelector('.js-search-bar').value.toLowerCase();
 
-    fetch(`http://localhost:8082/products`)
+    fetch(`http://localhost:8082/api/products`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -160,7 +158,7 @@ function searchForProductEnter() {
     .addEventListener('keydown', (e) => {
       const search = document.querySelector('.js-search-bar').value.toLowerCase();
 
-    fetch(`http://localhost:8082/products`)
+    fetch(`http://localhost:8082/api/products`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -194,55 +192,54 @@ function searchForProductEnter() {
 
 //sign-in scripts.
 //for login/ logout button toggling
-window.addEventListener('DOMContentLoaded', function () {
-  const user = JSON.parse(localStorage.getItem('user'));
-  
+window.addEventListener('DOMContentLoaded', function (event) {
+  event.preventDefault();
+  //const user = JSON.parse(localStorage.getItem('user'));
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  }
+  // Get the 'user' cookie
+  const userCookie = getCookie('user');
+  const user = userCookie ? JSON.parse(userCookie) : null;
+
+
   const welcomeMsg = document.getElementById('welcome-msg');
   const authLink = document.getElementById('auth-link');
 
   const accountDropdown = document.getElementById('accountDropdown');
   const darkOverlay = document.getElementById('darkOverlay');
   const dropdownContent = accountDropdown.querySelector('.dropdown-content');
+  const signInLink = document.querySelector('a[href="./sign-in.html"]'); //to remove redirect to login page if user already logged in
 
   /* 
-  //function debounce(func, wait) {
-  //   let timeout;
-  //   return function executedFunction(...args) {
-  //     const later = () => {
-  //       clearTimeout(timeout);
-  //       func(...args);
-  //     };
-  //     clearTimeout(timeout);
-  //     timeout = setTimeout(later, wait);
-  //   };
-  // }
+  function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  }
 
-  // // Debounced event handlers
-  // const debouncedMouseEnter = debounce(function() {
-  //   //console.log("changed");
-  //   darkOverlay.classList.add('active');
-  //   dropdownContent.classList.add('active');
-  // }, 100);
+  // Debounced event handlers
+  const debouncedMouseEnter = debounce(function() {
+    //console.log("changed");
+    darkOverlay.classList.add('active');
+    dropdownContent.classList.add('active');
+  }, 100);
 
-  // const debouncedMouseLeave = debounce(function() {
-  //   darkOverlay.classList.remove('active');
-  //   //dropdownContent.classList.remove('active');
-  // }, 100);
+  const debouncedMouseLeave = debounce(function() {
+    darkOverlay.classList.remove('active');
+    //dropdownContent.classList.remove('active');
+  }, 100);
 
-  // const debouncedMouseEnterDropdown = debounce(function() {
-  //   darkOverlay.classList.add('active');
-  //   dropdownContent.classList.add('active');
-  // }, 100);
-
-  // const debouncedMouseLeaveDropdown = debounce(function() {
-  //   darkOverlay.classList.remove('active');
-  //   dropdownContent.classList.remove('active');
-  // }, 100);
-
-  // accountDropdown.addEventListener('mouseenter', debouncedMouseEnter);
-  // accountDropdown.addEventListener('mouseleave', debouncedMouseLeave);
-  // dropdownContent.addEventListener('mouseenter', debouncedMouseEnterDropdown);
-  // dropdownContent.addEventListener('mouseleave', debouncedMouseLeaveDropdown);
+  accountDropdown.addEventListener('mouseenter', debouncedMouseEnter);
+  accountDropdown.addEventListener('mouseleave', debouncedMouseLeave);
   */
 
   if (user) {
@@ -253,10 +250,12 @@ window.addEventListener('DOMContentLoaded', function () {
     // User is logged in
     welcomeMsg.textContent = `Hello, ${user.name}`;
     authLink.textContent = 'Sign Out'; // Change to 'Sign Out'
+    signInLink.setAttribute('href', '#');
     
     // Handle Sign Out
     authLink.addEventListener('click', function () {
-      localStorage.removeItem('user');
+      //set cookie date in the past to effectively delete cookie
+      document.cookie = "user=; expires=Fri, 18 Oct 2024 00:00:00 UTC; path=/;";
       // Optionally, you can call the logout API as well
       fetch('http://localhost:8082/api/logout', {
         method: 'POST',
@@ -274,6 +273,8 @@ window.addEventListener('DOMContentLoaded', function () {
     // User is not logged in
     welcomeMsg.textContent = `Hello, Sign in`;
     authLink.textContent = 'Sign In'; // Change to 'Sign In'
+
+    signInLink.setAttribute('href', './sign-in.html');
 
     // Handle Sign In
     authLink.addEventListener('click', function () {

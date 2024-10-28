@@ -21,7 +21,10 @@
     </a>
 
     <div class="container">
-        <form class="sign-in-form" id="sign-in-form" onsubmit="event.preventDefault(); Login();">
+        <!--
+        <form class="sign-in-form" id="sign-in-form" onsubmit="event.preventDefault(); Login(); LoginWithCookie();">
+        -->
+        <form class="sign-in-form" id="sign-in-form" onsubmit="event.preventDefault(); LoginWithCookie();">
             <h1>Sign-In</h1>
             <div class="form-group">
                 <label for="email">Email</label>

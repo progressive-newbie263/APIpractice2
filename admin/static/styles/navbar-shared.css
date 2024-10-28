@@ -86,3 +86,9 @@ footer {
   color: white;
   font-size: 14px;
 }
+
+.product-page-sidebar {
+  padding-top: 40px; 
+  padding-right: 40px; 
+  width: 290px;
+}

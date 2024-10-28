@@ -103,7 +103,7 @@ export let products = [];
 export function loadProductsFetch() {
   //make a GET request by default.
   const promise = fetch(
-    'http://localhost:8082/products'
+    'http://localhost:8082/api/products'
   ).then((response) => {
     return response.json();//console.log(response) returned a JSON object;
   }).then((productsData) => {
@@ -148,7 +148,7 @@ export function loadProducts(fun) {
     console.log('Unexpected Error. Please try again later.');
   });
 
-  xhr.open('GET', 'http://localhost:8082/products');
+  xhr.open('GET', 'http://localhost:8082/api/products');
   xhr.send(); //asynchronous, so it just send first, no response
 }
 

@@ -26,7 +26,7 @@ h1 {
 }
 
 .container {
-  margin-left: 200px;
+  margin-left: 250px;
   margin-top: -150px;
   background-color: #fff;
   padding: 20px;
@@ -235,3 +235,4 @@ form {
 .zoom-out-image:hover {
   transform:scale(1.25);
 }
+

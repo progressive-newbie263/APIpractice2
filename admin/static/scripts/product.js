@@ -13,7 +13,7 @@ const productsPerPage = 5; //5 prods per page
 // Fetch and display products from products API.
 async function fetchProducts() {
   try {
-    const response = await fetch('http://localhost:8082/products');
+    const response = await fetch('http://localhost:8082/api/products');
     
     if (!response.ok) throw new Error("Failed to fetch products.");
     
@@ -154,7 +154,7 @@ productForm.addEventListener("submit", async (e) => {
   try {
     if (editingProduct) {
       // Update product
-      await fetch(`http://localhost:8082/products/${editingProduct.id}`, {
+      await fetch(`http://localhost:8082/api/products/${editingProduct.id}`, {
         method: "PUT",
         
         headers: { 
@@ -166,7 +166,7 @@ productForm.addEventListener("submit", async (e) => {
       editingProduct = null;
     } else {
       // Add new product
-      await fetch(`http://localhost:8082/products`, {
+      await fetch(`http://localhost:8082/api/products`, {
         method: "POST",
         
         headers: { 
@@ -212,7 +212,7 @@ function editProduct(id) {
 async function deleteProduct(id) {
   if (confirm("Are you sure you want to delete this product?")) {
     try {
-      await fetch(`http://localhost:8082/products/${id}`, {
+      await fetch(`http://localhost:8082/api/products/${id}`, {
         method: "DELETE",
       });
       fetchProducts(); // Refresh product list after deletion

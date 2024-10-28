@@ -101,9 +101,11 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		Value:    token,
 		Expires:  time.Now().Add(time.Hour * 24), // 1 day
 		HttpOnly: true,
+		//Domain:   "localhost",
 
 		//notice: this is added. to make sure it is accessible across site.
-		Path: "/", 
+		Path: "/",
+		SameSite: http.SameSiteNoneMode, //cross-origin access 
 	})
 
 	role := user.Role
@@ -114,6 +116,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	} else {
 		redirectURL = "./client/amazon.html" // Redirect to client page
 	}
+
+	
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]interface{}{
