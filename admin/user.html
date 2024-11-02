@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" sizes="32x32" href="../images/ice-icon-1.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Users Control</title>
+  <link rel="stylesheet" href="/static/styles/navbar-shared.css">
+  <!-- <link rel="stylesheet" href="/static/styles/user.css"> -->
+  <link rel="stylesheet" href="/static/styles/product-user.css">
+  <link rel="stylesheet" href="/static/styles/user.css">
+</head>
+
+<body>
+  <!--this admin-page is shared between pages.-->
+  <div class="admin-page">
+    <div class="sidebar product-page-sidebar">
+      <h2 class="sidebar-title">
+        <a href="/admin" style="text-decoration: none; color: white;">
+          <img src="../images/amazon-logo-white.png" style="width: 150px; align-items: center;">
+        </a>
+      </h2>
+
+      <img src="../images/admin-pfp.jpg" class="admin-pfp" style="margin-bottom: 16px;">
+
+      <ul class="sidebar-menu">
+        <li><a href="/admin/overview" onclick="showSection('overview')">Overview</a></li>
+
+        <li><a href="/admin/users" onclick="showSection('manageUsers')">Users</a></li>
+        
+        <!-- <li><a href="#" onclick="showSection('manageStaff')">Manage Staff</a></li> -->
+        
+        <li><a href="#" onclick="showSection('store')">Store</a></li>
+        
+        <li><a href="/admin/products" onclick="showSection('product')">Product</a></li>
+        
+        <!-- <li><a href="#" onclick="showSection('categoryProduct')">Category Product</a></li> -->
+        
+        <li><a href="#" onclick="showSection('orders')">Orders</a></li>
+        
+        <li><a href="#" onClick="logout();" style="margin-top: 100px;">Log Out</a></li>
+      </ul>
+    </div>
+
+    <div class="content" style="margin-top: -20px; margin-left: -100px; width: 1800px;">
+      <!-- Main Content -->
+      <div class="container sized-container">
+        <!-- User Form Section -->
+        <div class="user-container">
+          <h2 class="section-title">Users</h2>
+
+          <div class="search-user">
+            <h3>Search for user:</h3>
+            <input class="search-input" type="text" id="searchUserInput" placeholder="Search for user...">
+            <button id="searchUserButton">🔍</button>
+          </div>
+
+          <!-- Users Section -->
+          <div>
+            <!-- Creating a dynamic users table -->
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Email</th>
+                  <th>Password</th>
+                  <th>Name</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="userTable">
+                <!-- User rows will be dynamically inserted here -->
+              </tbody>
+            </table>
+          </div>
+
+          <h2 class="section-title">Add New User</h2>
+          
+          <form id="addUserForm">
+            <div class="form-group">
+              <label for="userEmail">Email:</label>
+              <input type="email" id="userEmail" name="email">
+            </div>
+
+            <div class="form-group">
+              <label for="userPassword">Password:</label>
+              <input type="password" id="userPassword" name="password">
+            </div>
+
+            <div class="form-group">
+              <label for="firstName">Name:</label>
+              <input type="text" id="Name" name="name">
+            </div>
+
+            <br>
+
+            <div class="form-group">
+              <input type="submit" value="Add User">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; JackFrost's Admin Page</p>
+  </footer>
+
+  <script src="/static/scripts/index.js"></script>
+  <script src="/static/scripts/user.js"></script>
+  <script src="/static/scripts/logout.js"></script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+/* General layout */
+.admin-page {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* welcome title styling */
+/* Enhanced color change for the h1 title with a wider color range */
+.welcome-msg {
+  font-size: 2.5em;
+  text-align: center;
+  margin-bottom: 20px;
+  background: linear-gradient(45deg, #ff8c42, #645a01, #66b2ff, #ff4081);
+  background-size: 200% 200%; /* Adjusts the gradient size */
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: colorChange 3s infinite, float 3s ease-in-out infinite;
+  cursor: pointer;
+}
+
+/* Color-change animation for the gradient */
+@keyframes colorChange {
+  0% { background-position: 0% 50%; }      /* Orange to Light Blue */
+  20% { background-position: 25% 50%; }    /* Transition to Pink */
+  40% { background-position: 50% 50%; }    /* Transition to Green */
+  60% { background-position: 75% 50%; }    /* Transition to Purple */
+  80% { background-position: 100% 50%; }   /* Back to Orange */
+  100% { background-position: 0% 50%; }    /* Restart at Orange */
+}
+
+/* Float effect */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+
+
+
+
+
+/* Main content styling */
+.content {
+  width: 100%;
+  padding: 30px;
+  background-color: #f4f1ee; 
+  margin-left: 290px;
+  flex: 1;
+}
+
+/* Info cards styling */
+.info-cards {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 28%;
+  text-align: center;
+  transition: transform 0.3s;
+  border-top: 4px solid #ff8c42; 
+}
+
+.card:hover {
+  transform: translateY(-5px) scale(1.05);
+}
+
+.card h3 {
+  font-size: 16px;
+  color: #ff8c42;
+}
+
+.card p {
+  font-size: 24px;
+  color: #333;
+  margin: 10px 0 0;
+}
+
+/* Data table styling */
+.data-table {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.data-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+}
+
+.data-table th, .data-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.data-table th {
+  background-color: #ff8c42;
+  color: #fff;
+}
+
+.data-table tr:hover {
+  background-color: #ffe0b3; /* Màu cam nhạt khi di chuột */
+}
+
+

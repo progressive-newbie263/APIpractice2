@@ -112,56 +112,58 @@ export function updateDeliveryOption(productId, deliveryOptionId) {
 //   return text;
 // }
 
-async function saveCartToDatabase() {
-  const cart = loadFromStorage();
-  const userData = JSON.parse(localStorage.getItem('user'));
 
-  fetch(`http://localhost:8082/api/cart?userId=${userData.id}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error("Error fetching cart:", error));
+// lấy cart thẳng từ localStorage luôn
+// async function saveCartToDatabase() {
+//   const cart = loadFromStorage();
+//   const userData = JSON.parse(localStorage.getItem('user'));
 
-  console.log("userID:", userData ? userData.id : null);
+//   fetch(`http://localhost:8082/api/cart?userId=${userData.id}`, {
+//     method: 'GET',
+//     headers: {
+//       'Content-Type': 'application/json'
+//     }
+//   })
+//   .then(response => response.json())
+//   .then(data => console.log(data))
+//   .catch(error => console.error("Error fetching cart:", error));
 
-  if (!userData) {
-    console.error('User datas not found in localStorage');
-    return;
-  }
+//   console.log("userID:", userData ? userData.id : null);
 
-  // Tạo mảng sản phẩm với dữ liệu cần thiết
-  const cartItems = cart.map(item => ({
-    user_id: userData.id,                 // user id từ localStorage.
-    product_id: item.productId,              // productId từ localStorage
-    quantity: item.quantity,                  // số lượng
-    delivery_option_id: item.deliveryOptionId // deliveryOptionId
-  }));
+//   if (!userData) {
+//     console.error('User datas not found in localStorage');
+//     return;
+//   }
 
-  try {
-    const response = await fetch('http://localhost:8082/api/cart', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(cartItems),
-      //credentials: 'include'
-    });
+//   // Tạo mảng sản phẩm với dữ liệu cần thiết
+//   const cartItems = cart.map(item => ({
+//     user_id: userData.id,                 // user id từ localStorage.
+//     product_id: item.productId,              // productId từ localStorage
+//     quantity: item.quantity,                  // số lượng
+//     delivery_option_id: item.deliveryOptionId // deliveryOptionId
+//   }));
 
-    if (!response.ok) {
-      console.log('Cart Items sent:', cartItems); // Thêm dòng này để kiểm tra dữ liệu
-      throw new Error('Failed to save cart to database');
-    }
+//   try {
+//     const response = await fetch('http://localhost:8082/api/cart', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json'
+//       },
+//       body: JSON.stringify(cartItems),
+//       //credentials: 'include'
+//     });
 
-    const result = await response.json();
-    console.log('Cart saved successfully:', result);
-  } catch (error) {
-    console.error('Error saving cart:', error);
-  }
-}
+//     if (!response.ok) {
+//       console.log('Cart Items sent:', cartItems); // Thêm dòng này để kiểm tra dữ liệu
+//       throw new Error('Failed to save cart to database');
+//     }
+
+//     const result = await response.json();
+//     console.log('Cart saved successfully:', result);
+//   } catch (error) {
+//     console.error('Error saving cart:', error);
+//   }
+// }
 
 
-saveCartToDatabase();
+// saveCartToDatabase();

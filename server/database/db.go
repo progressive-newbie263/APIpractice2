@@ -240,7 +240,7 @@ func SearchUserByID(userID int) (*User, error) {
         email,  
         password,
         name
-    FROM products WHERE id = $1`
+    FROM users WHERE id = $1`
 
     err := DB.QueryRow(query, userID).Scan(
         &user.ID,

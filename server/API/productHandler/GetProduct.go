@@ -10,7 +10,7 @@ import (
 // SearchProductByIDHandler searches for a product by ID and returns it as JSON
 func SearchProductByIDHandler(w http.ResponseWriter, r *http.Request) {
     // Extract the product ID from the URL path
-    path := strings.TrimPrefix(r.URL.Path, "/products/")
+    path := strings.TrimPrefix(r.URL.Path, "/api/products/")
     
     if path == "" {
         http.Error(w, "Product ID is required", http.StatusBadRequest)

@@ -124,7 +124,7 @@ export function renderOrderSummary() {
     return html;
   }
   
-  document.querySelector('.js-order-summary')
+  document.querySelector('.js-cart-summary')
     .innerHTML = cartSummaryHTML;
   
   //console.log(cartSummaryHTML);

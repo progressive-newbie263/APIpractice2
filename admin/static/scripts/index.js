@@ -1,12 +1,34 @@
+// Hàm để hiển thị phần nội dung tương ứng và làm nổi bật item đã chọn
 function showSection(sectionId) {
+  // Ẩn tất cả các phần
   const sections = document.querySelectorAll('.section');
-  
   sections.forEach(section => {
     section.style.display = 'none';
   });
 
-  document.getElementById(sectionId).style.display = 'block';
+  // Hiển thị phần tương ứng
+  const selectedSection = document.getElementById(sectionId);
+  if (selectedSection) {
+    selectedSection.style.display = 'block';
+  }
+
+  // Xóa lớp active khỏi tất cả các item trong sidebar
+  const menuItems = document.querySelectorAll('.sidebar-menu li a');
+  menuItems.forEach(item => {
+    item.classList.remove('active');
+  });
+
+  // Thêm lớp active vào item đã chọn
+  const selectedItem = Array.from(menuItems).find(item => 
+    item.getAttribute('onclick') === `showSection('${sectionId}')`
+  );
+
+  if (selectedItem) {
+    selectedItem.classList.add('active');
+  }
 }
+
+
 
 // Function to get admin cookie by name
 function getCookie(name) {
@@ -36,3 +58,5 @@ function checkAdminUser() {
 
 // Call checkAdminUser when DOM is loaded
 window.addEventListener('DOMContentLoaded', checkAdminUser);
+
+

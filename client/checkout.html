@@ -2,7 +2,7 @@
 <html>
   <head>
     <link rel="icon" type="image/png" sizes="32x32" href="../images/ice-icon-1.png">
-    <title>Checkout</title>
+    <title>Virtual Amazon Checkout Page</title>
 
     <!-- This code is needed for responsive design to work.
       (Responsive design = make the website look good on
@@ -18,26 +18,33 @@
     <link rel="stylesheet" href="./styles/shared/general.css">
     <link rel="stylesheet" href="./styles/pages/checkout/checkout-header.css">
     <link rel="stylesheet" href="./styles/pages/checkout/checkout.css">
+    <!-- 
+      PayPal's JavaScript code. Due to financial regulations,
+      we must load this code using a <script> tag. 
+    -->
+    <script src="https://www.paypal.com/sdk/js?client-id=test"></script>
   </head>
   <body>
-    <div class="checkout-header js-checkout-header">
-    </div>
+    <header class="checkout-header js-checkout-header"></header>
 
-    <div class="main">
+    <main>
       <div class="page-title">Review your order</div>
 
       <div class="checkout-grid">
-        <div class="order-summary js-order-summary">
-        </div>
+        <div class="cart-summary js-cart-summary"></div>
 
-        <div class="payment-summary js-payment-summary">
+        <div class="payment-area">
+          <div class="payment-summary js-payment-summary"></div>
+          <!-- <div id="paypal-container-Y4YZ9GG6REM3U"></div> -->
         </div>
       </div>
-    </div>
-    <!-- PayPal's JavaScript code. Due to financial regulations,
-      we must load this code using a <script> tag. -->
-      <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD&disable-funding=venmo,paylater"></script>
+    </main>
 
+    <script>
+      paypal.Buttons().render(".payment-area");
+    </script>
+
+    <!--customized JS for page-->
     <script type="module" src="./scripts/checkout.js"></script>
   </body>
 </html>

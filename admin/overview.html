@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="/admin">
+    <link rel="icon" type="image/png" sizes="32x32" href="../images/ice-icon-1.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overview</title>
+    <link rel="stylesheet" href="/static/styles/navbar-shared.css">
+    <link rel="stylesheet" href="/static/styles/main.css">
+</head>
+<body>
+  <div class="admin-page">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <h2 class="sidebar-title">
+        <a href="/admin" style="text-decoration: none; color: white;">
+          <img src="../images/amazon-logo-white.png" style="width: 150px; align-items: center;">
+        </a>
+      </h2>
+
+      <img src="../images/admin-pfp.jpg" class="admin-pfp">
+
+      <ul class="sidebar-menu">
+        <li><a href="/admin/overview" onclick="showSection('overview')">Overview</a></li>
+
+        <li><a href="/admin/users" onclick="showSection('manageUsers')">Users</a></li>
+        
+        
+        <li><a href="#" onclick="showSection('store')">Store</a></li>
+        
+        <li><a href="/admin/products" onclick="showSection('product')">Product</a></li>
+        
+        <li><a href="#" onclick="showSection('orders')">Orders</a></li>
+        
+        <li><a href="#" onClick="logout();" style="margin-top: 100px;">Log Out</a></li>
+      </ul>
+    </div>
+
+      <!-- Main Content -->
+    <div class="content">
+      <h1 class="welcome-msg">Admin Dashboard</h1>
+
+      <h2>Last Month's Sale</h2>
+      
+      <!-- Info cards -->
+      <div class="info-cards">
+        <div class="card">
+          <h3>Total Sales</h3>
+          <p id="total-sales">$10,000</p>
+        </div>
+        <div class="card">
+          <h3>Total Orders</h3>
+          <p id="total-orders">50</p>
+        </div>
+        <div class="card">
+          <h3>Total Users</h3>
+          <p id="total-users">300</p>
+        </div>
+      </div>
+
+      <!-- Data table for product summary -->
+      <div class="data-table">
+        <h2>Latest Products</h2>
+        <table>
+            <thead>
+              <tr>
+                <th>Product ID</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Stock</th>
+                <th>Price</th>
+              </tr>
+            </thead>
+            <tbody id="product-table">
+              <tr>
+                <td>1</td>
+                <td>Wireless Earbuds</td>
+                <td>Electronics</td>
+                <td>50</td>
+                <td>$99.99</td>
+              </tr>
+
+              <tr>
+                <td>2</td>
+                <td>Running Shoes</td>
+                <td>Footwear</td>
+                <td>30</td>
+                <td>$59.99</td>
+              </tr>
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; JackFrost's Amazon Page</p>
+  </footer>
+
+  <script src="/static/scripts/index.js"></script>
+  <script src="/static/scripts/logout.js"></script>
+  <script>
+    // Simulate data
+    document.getElementById('total-sales').innerText = "$10,000";
+    document.getElementById('total-orders').innerText = "120";
+    document.getElementById('total-users').innerText = "300";
+
+    // Add products dynamically to the table
+    const products = [
+      { 
+        id: 3, 
+        name: "Gaming Mouse", 
+        category: "Electronics", 
+        stock: 40, 
+        price: "$79.99" 
+      },
+      { 
+        id: 4, 
+        name: "Yoga Mat", 
+        category: "Sports", 
+        stock: 20, 
+        price: "$25.99" 
+      }
+    ];
+
+    const productTable = document.getElementById('product-table');
+    products.forEach(product => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${product.id}</td>
+        <td>${product.name}</td>
+        <td>${product.category}</td>
+        <td>${product.stock}</td>
+        <td>${product.price}</td>
+      `;
+      productTable.appendChild(row);
+    });
+  </script>
+</body>
+</html>

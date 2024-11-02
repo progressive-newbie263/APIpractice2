@@ -26,16 +26,17 @@ h1 {
 }
 
 .container {
-  margin-left: 250px;
-  margin-top: -150px;
+  margin-left: 300px;
+  margin-top: -50px;
   background-color: #fff;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   -webkit-transform:scale(0.5);
-  -moz-transform:scale(0.85);
-  -ms-transform:scale(0.85);
-  transform:scale(0.85);
+  -moz-transform:scale(0.9);
+  -ms-transform:scale(0.9);
+  transform:scale(0.9);
+  height: fit-content;
 }
 
 .section-title {
@@ -72,9 +73,15 @@ th {
   font-weight: 600;
 }
 
+/* .user-password {
+  width: 300px;
+} */
+
 td {
   background-color: #fff;
 }
+
+
 
 tr:hover {
   background-color: #f7f7f7;
@@ -224,6 +231,8 @@ form {
   margin: 20px 0;
 }
 
+
+
 #searchProductButton {
   padding: 9px;
   border-radius: 10px;
@@ -232,7 +241,40 @@ form {
   border-width: 1px;
 }
 
+#searchUserButton {
+  padding: 9px;
+  border-radius: 10px;
+  margin-left: -42px;
+  margin-top: 1px;
+  border-width: 1px;
+}
+
+
 .zoom-out-image:hover {
   transform:scale(1.25);
 }
 
+
+.sidebar {
+  width: 290px;
+  padding-top: 40px;
+  padding-right: 20px;
+}
+
+.sized-container {
+  -webkit-transform:scale(0.5);
+  -moz-transform:scale(0.8);
+  -ms-transform:scale(0.8);
+  transform:scale(0.8);
+  height: fit-content;
+}
+
+/*fixed footer, only for prod and user*/
+footer {
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  background-color: #232f3e;
+  color: white;
+  font-size: 14px;
+}

@@ -8,6 +8,7 @@ import { cart, addToCart, calculateCartQuantity } from "../data/cart.js";
 // Function to save orders to local storage
 function saveOrders() {
   localStorage.setItem('orders', JSON.stringify(orders));
+  console.log(orders);
 }
 
 function deleteOrder() {
@@ -132,6 +133,7 @@ async function loadPage() {
   document.querySelector('.js-orders-grid').innerHTML = ordersHTML;
 
   function updateCartQuantity() {
+    
     const cartQuantity = calculateCartQuantity();
 
     document.querySelector('.order-cart-quantity').innerHTML = cartQuantity;
@@ -155,6 +157,7 @@ async function loadPage() {
         // Update the total cost
         const productDetails = getProduct(button.dataset.productId);
         const order = orders.find(order => order.products.includes(product));
+        
         order.totalCostCents += productDetails.priceCents * 1.1; // 1.1 because 10% tax
 
         // Update the total cost in the DOM
