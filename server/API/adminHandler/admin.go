@@ -40,3 +40,12 @@ func UserPageHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	tmpl.Execute(w, nil)
 }
+
+func OrdersPageHandler(w http.ResponseWriter, r *http.Request) {
+	tmpl, err := template.ParseFiles("../admin/order-page.html")
+	if err != nil {
+		http.Error(w, "Unable to load admin page", http.StatusInternalServerError)
+		return
+	}
+	tmpl.Execute(w, nil)
+}

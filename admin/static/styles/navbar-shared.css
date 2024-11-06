@@ -38,6 +38,7 @@ body, html {
 }
 
 .sidebar-menu li {
+  align-items: center;
   margin-bottom: 10px;
 }
 
@@ -104,4 +105,8 @@ footer {
   height: 200px; 
   object-fit: fill; 
   margin-left: -20px;
+}
+
+.sidebar-icon {
+  width: 20px;
 }

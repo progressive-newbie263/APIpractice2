@@ -1,0 +1,87 @@
+/* Main content styling */
+.content {
+  width: 100%;
+  padding: 30px;
+  background-color: #f4f1ee; 
+  margin-left: 290px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Keep footer and pagination at the bottom */
+}
+
+.admin-page {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* welcome title styling */
+/* Enhanced color change for the h1 title with a wider color range */
+.welcome-msg {
+  font-size: 2.5em;
+  text-align: center;
+  margin-bottom: 20px;
+  background: linear-gradient(45deg, #ff8c42, #645a01, #66b2ff, #ff4081);
+  background-size: 200% 200%; /* Adjusts the gradient size */
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: colorChange 3s infinite, float 3s ease-in-out infinite;
+  cursor: pointer;
+}
+
+/* Color-change animation for the gradient */
+@keyframes colorChange {
+  0% { background-position: 0% 50%; }      /* Orange to Light Blue */
+  20% { background-position: 25% 50%; }    /* Transition to Pink */
+  40% { background-position: 50% 50%; }    /* Transition to Green */
+  60% { background-position: 75% 50%; }    /* Transition to Purple */
+  80% { background-position: 100% 50%; }   /* Back to Orange */
+  100% { background-position: 0% 50%; }    /* Restart at Orange */
+}
+
+/* Float effect */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+
+
+/*
+  styling order page UI
+*/
+.orders-table {
+  width: 100%;
+  color: black;
+  border-collapse: collapse;
+  margin-top: 20px;
+  /* min-height: 300px; */
+  /*transition: 0.3s ease-in-out;*/
+}
+
+.orders-table th, .orders-table td {
+  padding: 10px;
+  border: 1px solid #797777;
+  text-align: left;
+}
+
+.orders-table th {
+  background-color: #e9a154;
+}
+
+.orders-table tr:hover {
+  background-color: #e1c8ad;
+}
+
+.orders-table button {
+  background-color: rgb(35, 186, 191);
+  padding: 5px 10px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  color: white;
+  transition: 0.3s ease-in-out;
+}
+
+.orders-table button:hover {
+  background-color: rgb(61, 118, 224);
+}

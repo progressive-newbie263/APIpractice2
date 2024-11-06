@@ -7,38 +7,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Page</title>
     <link rel="stylesheet" href="/static/styles/navbar-shared.css">
-    <link rel="stylesheet" href="/static/styles/main.css">
+    <link rel="stylesheet" href="/static/styles/overview.css">
 </head>
 <body>
     <div class="admin-page">
         <!-- Sidebar -->
         <div class="sidebar">
             <h2 class="sidebar-title">
-                <a href="/admin" style="text-decoration: none; color: white;">
-                  <img src="../images/amazon-logo-white.png" style="width: 150px; align-items: center;">
-                </a>
+              <a href="/admin" style="text-decoration: none; color: white;">
+                <img src="../images/amazon-logo-white.png" style="width: 150px; align-items: center;">
+              </a>
             </h2>
-
+      
             <img src="../images/admin-pfp.jpg" class="admin-pfp">
-
+      
             <ul class="sidebar-menu">
-                <li><a href="/admin/overview" onclick="showSection('overview')">Overview</a></li>
-
-                <li><a href="/admin/users" onclick="showSection('manageUsers')">Users</a></li>
-                
-                <!-- <li><a href="#" onclick="showSection('manageStaff')">Manage Staff</a></li> -->
-                
-                <li><a href="#" onclick="showSection('store')">Store</a></li>
-                
-                <li><a href="/admin/products" onclick="showSection('product')">Product</a></li>
-                
-                <!-- <li><a href="#" onclick="showSection('categoryProduct')">Category Product</a></li> -->
-                
-                <li><a href="#" onclick="showSection('orders')">Orders</a></li>
-                
-                <li><a href="#" onClick="logout();" style="margin-top: 100px;">Log Out</a></li>
+              <!--Overview/Home page-->
+              <li>
+                <a href="/admin/overview" onclick="showSection('overview')">
+                  <img class="sidebar-icon" src="../images/admin-sidebar-icons/icons8-home-50.png" alt="home-icon">
+                  Overview
+                </a>
+              </li>
+      
+              <!--Users page-->
+              <li>
+                <a href="/admin/users" onclick="showSection('manageUsers')">
+                  <img class="sidebar-icon" src="../images/admin-sidebar-icons/icons8-user-50.png" alt="home-icon">
+                  Users
+                </a>
+              </li>
+      
+              <!--Store page-->
+              <li>
+                <a href="#" onclick="showSection('store')">
+                  <img class="sidebar-icon" src="../images/admin-sidebar-icons/icons8-store-50.png" alt="home-icon">
+                  Store
+                </a>
+              </li>
+      
+              <!--Products page-->
+              <li>
+                <a href="/admin/products" onclick="showSection('product')">
+                  <img class="sidebar-icon" src="../images/admin-sidebar-icons/icons8-product-50.png" alt="home-icon">
+                  Products
+                </a>
+              </li>
+      
+              <!--Orders page-->
+              <li>
+                <a href="/admin/orders" onclick="showOrders(); showSection('orders')">
+                  <img class="sidebar-icon" src="../images/admin-sidebar-icons/icons8-order-50.png" alt="home-icon">
+                  Orders
+                </a>
+              </li>
+              
+              <!--Logout link.-->
+              <li>
+                <a href="#" onClick="logout();" style="margin-top: 85px;">
+                  <img class="sidebar-icon" src="../images/admin-sidebar-icons/icons8-logout-50.png" alt="home-icon">
+                  Log Out
+                </a>
+              </li>
             </ul>
-        </div>
+          </div>
 
         <!-- Main Content -->
         <div class="content">

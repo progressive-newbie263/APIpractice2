@@ -1,0 +1,110 @@
+/* Overlay styling for blurred background effect */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7); /* Darker overlay for better contrast */
+  backdrop-filter: blur(5px);
+  z-index: 900;
+  transition: opacity 0.3s ease; /* Smooth transition for fade-out */
+}
+
+/* Fade-out class */
+.fade-out {
+  opacity: 0; /* Set to transparent for fade-out */
+}
+
+/* Order details modal styling */
+.order-details-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%; /* Make it wider */
+  max-width: 900px;
+  max-height: 80vh; /* Allow more height */
+  background-color: #ffffff; /* White background */
+  padding: 20px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3); /* Stronger shadow for depth */
+  border-radius: 12px; /* More rounded corners */
+  z-index: 1000; /* Ensure modal is on top */
+  overflow-y: auto;
+  animation: slide-in 0.5s ease; /* Animation for modal appearance */
+}
+
+/* Animation for modal slide-in */
+@keyframes slide-in {
+  from {
+    transform: translate(-50%, -60%);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, -50%);
+    opacity: 1;
+  }
+}
+
+.order-details-container h2 {
+  font-size: 1.8rem; /* Larger title */
+  color: #e63946; /* Bright red */
+  margin-bottom: 10px;
+  text-align: center; /* Center align title */
+}
+
+.order-details-container p,
+.order-details-container ul {
+  margin-bottom: 10px;
+  color: #333; /* Darker text for better readability */
+  font-size: 1.1rem; /* Slightly larger text */
+}
+
+.order-details-container ul.order-products-list {
+  list-style: none;
+  padding: 0;
+}
+
+.order-details-container ul.order-products-list li {
+  margin-bottom: 12px; /* More space between items */
+  padding: 15px; /* More padding for items */
+  background-color: #f1faee; /* Soft light background */
+  border-radius: 6px; /* Slightly rounded corners */
+  border-left: 5px solid #457b9d; /* Decorative left border */
+  transition: background-color 0.3s; /* Transition effect for hover */
+}
+
+.order-details-container ul.order-products-list li:hover {
+  background-color: #a8dadc; /* Change color on hover */
+}
+
+.order-details-container button {
+  position: fixed;
+  right: 10px;
+  top: -10px;
+  font-size: 10px;
+  display: block;
+  margin: 20px auto 0;
+  padding: 8px 10px;
+  background-color: red; /* Teal background */
+  color: #fff;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out, transform 0.2s; /* Animation for hover */
+}
+
+.order-details-container button:hover {
+  background-color: darkred; /* Darker teal on hover */
+  transform: scale(1.05); /* Slightly enlarge button */
+}
+/* 
+.order-products-list {
+  position: relative;
+} */
+
+.order-products-list img {
+  position: absolute;
+  right: 6px;
+  top: 6px;
+}

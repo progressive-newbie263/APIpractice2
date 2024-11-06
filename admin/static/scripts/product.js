@@ -1,3 +1,6 @@
+import { renderPaginationControls } from "./utils/pageNumbering.js";
+
+
 // Get DOM elements
 const productList = document.getElementById("productTable");
 const productForm = document.getElementById("addProductForm");
@@ -88,30 +91,38 @@ function renderProductList(productArray) {
     productList.appendChild(row);
   });
 
-  renderPaginationControls(productArray);
+  renderPaginationControls(
+    productArray.length,
+    productsPerPage,
+    currentPage,
+    (newPage) => {
+      currentPage = newPage;
+      renderProductList(productArray);
+    }
+  );
 }
 
 // Render pagination buttons
-function renderPaginationControls(productArray) {
-  const paginationContainer = document.getElementById("paginationControls");
-  paginationContainer.innerHTML = ""; // Clear the existing buttons
+// function renderPaginationControls(productArray) {
+//   const paginationContainer = document.getElementById("paginationControls");
+//   paginationContainer.innerHTML = ""; // Clear the existing buttons
 
-  const totalPages = Math.ceil(products.length / productsPerPage);
+//   const totalPages = Math.ceil(products.length / productsPerPage);
 
-  if(totalPages > 0) {
-    for (let i = 1; i <= totalPages; i++) {
-      const button = document.createElement("button");
-      button.textContent = i;
-      button.className = i === currentPage ? "active" : "";
+//   if(totalPages > 0) {
+//     for (let i = 1; i <= totalPages; i++) {
+//       const button = document.createElement("button");
+//       button.textContent = i;
+//       button.className = i === currentPage ? "active" : "";
 
-      button.addEventListener("click", () => {
-        currentPage = i;
-        renderProductList(productArray);
-      });
-      paginationContainer.appendChild(button);
-    }
-  }
-}
+//       button.addEventListener("click", () => {
+//         currentPage = i;
+//         renderProductList(productArray);
+//       });
+//       paginationContainer.appendChild(button);
+//     }
+//   }
+// }
 
 
 //searching/filtering out products:

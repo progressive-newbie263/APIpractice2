@@ -47,6 +47,7 @@ func handleRequests() {
 	myRouter.HandleFunc("/admin/products", adminHandler.ProductPageHandler).Methods("GET")
 	myRouter.HandleFunc("/admin/overview", adminHandler.OverviewPageHandler).Methods("GET")
 	myRouter.HandleFunc("/admin/users", adminHandler.UserPageHandler).Methods("GET")
+	myRouter.HandleFunc("/admin/orders", adminHandler.OrdersPageHandler).Methods("GET")
 	myRouter.PathPrefix("/images/").Handler(http.StripPrefix("/images/", http.FileServer(http.Dir("../images"))))
 	myRouter.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("../admin/static"))))
 
@@ -77,7 +78,9 @@ func handleRequests() {
 
 	//orderAPI
 	//create order will create and fill in database both order_user and orders.
-	myRouter.HandleFunc("/api/orders", orderHandler.CreateOrder).Methods("POST")
+	myRouter.HandleFunc("/api/orders", orderHandler.CreateOrder).Methods("POST") //post cart to get order. 
+	myRouter.HandleFunc("/api/all-orders", orderHandler.GetAllOrders).Methods("GET") //get all orders in db
+	myRouter.HandleFunc("/api/order-details", orderHandler.GetOrderDetails).Methods("GET") // test; thêm ?order_id={orderId} vào: http://localhost:8082/api/order-details?order_id=Ig1cWE2tOMXzpC9mvfxo
 	
 
 	//middleware code which allows connections to database from outer source (?)

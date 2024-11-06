@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base href="/admin">
+  <link rel="icon" type="image/png" sizes="32x32" href="../images/ice-icon-1.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orders</title>
+  <link rel="stylesheet" href="/static/styles/navbar-shared.css">
+  <link rel="stylesheet" href="/static/styles/order.css">
+  <link rel="stylesheet" href="/static/styles/order-details.css">
+  <link rel="stylesheet" href="/static/styles/pagination-css/orderPagination.css">
+</head>
+
+<body>
+  <div class="admin-page">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <h2 class="sidebar-title">
+        <a href="/admin" style="text-decoration: none; color: white;">
+          <img src="../images/amazon-logo-white.png" style="width: 150px; align-items: center;">
+        </a>
+      </h2>
+
+      <img src="../images/admin-pfp.jpg" class="admin-pfp">
+
+      <ul class="sidebar-menu">
+        <!--Overview/Home page-->
+        <li>
+          <a href="/admin/overview" onclick="showSection('overview')">
+            <img class="sidebar-icon" src="../images/admin-sidebar-icons/icons8-home-50.png" alt="home-icon">
+            Overview
+          </a>
+        </li>
+
+        <!--Users page-->
+        <li>
+          <a href="/admin/users" onclick="showSection('manageUsers')">
+            <img class="sidebar-icon" src="../images/admin-sidebar-icons/icons8-user-50.png" alt="home-icon">
+            Users
+          </a>
+        </li>
+
+        <!--Store page-->
+        <li>
+          <a href="#" onclick="showSection('store')">
+            <img class="sidebar-icon" src="../images/admin-sidebar-icons/icons8-store-50.png" alt="home-icon">
+            Store
+          </a>
+        </li>
+
+        <!--Products page-->
+        <li>
+          <a href="/admin/products" onclick="showSection('product')">
+            <img class="sidebar-icon" src="../images/admin-sidebar-icons/icons8-product-50.png" alt="home-icon">
+            Products
+          </a>
+        </li>
+
+        <!--Orders page-->
+        <li>
+          <a href="/admin/orders" onclick="showOrders(); showSection('orders')">
+            <img class="sidebar-icon" src="../images/admin-sidebar-icons/icons8-order-50.png" alt="home-icon">
+            Orders
+          </a>
+        </li>
+        
+        <!--Logout link.-->
+        <li>
+          <a href="#" onClick="logout();" style="margin-top: 85px;">
+            <img class="sidebar-icon" src="../images/admin-sidebar-icons/icons8-logout-50.png" alt="home-icon">
+            Log Out
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+      <h1 class="welcome-msg">Order List</h1>
+
+      <table class="orders-table" id="ordersTable">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>User ID</th>
+            <th>Order Cost (USD)</th>
+            <th>Order Date (GMT+7)</th>
+            <!--view order in details-->
+            <th>Order Details</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <!-- Orders will be inserted here dynamically -->
+        </tbody>
+      </table>
+
+      <!--paging of products list.-->
+      <div id="paginationControls" class="pagination-controls">
+        <button id="prevPage" disabled>Previous</button>
+        <span id="pageInfo"></span>
+        <button id="nextPage">Next</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; JackFrost's Amazon Page</p>
+  </footer>
+
+  <script src="/static/scripts/index.js"></script>
+  <script src="/static/scripts/logout.js"></script>
+  <script src="/static/scripts/order.js"></script>
+  <script src="/static/scripts/order-details.js"></script>
+</body>
+</html>
