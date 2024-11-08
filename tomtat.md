@@ -12,3 +12,7 @@
 
 	myRouter.PathPrefix("/images/").Handler(http.StripPrefix("/images/", http.FileServer(http.Dir("../images"))))
 	myRouter.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("../admin/static"))))
+
+  
+  note: 8/11/2024: 
+  Có 1 lỗi liên quan đến productsHTML. Có thể xử lí bằng cách loại bỏ đi function userAccountButton ở tracking.js và orders.js.

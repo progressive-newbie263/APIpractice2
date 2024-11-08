@@ -24,7 +24,7 @@ export function addToCart(productId) {
 
   let quantity = 1; // Default value
   if (quantitySelector) {
-    const quantity = Number(quantitySelector.value);
+    quantity = Number(quantitySelector.value);
   }
 
   if (matchingItem) {

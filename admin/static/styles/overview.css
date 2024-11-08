@@ -60,7 +60,8 @@
   width: 28%;
   text-align: center;
   transition: transform 0.3s;
-  border-top: 4px solid #ff8c42; 
+  border-top: 4px solid #ff8c42;
+  cursor: pointer; 
 }
 
 .card:hover {

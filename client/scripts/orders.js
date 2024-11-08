@@ -1,48 +1,57 @@
 import { addToCart, calculateCartQuantity } from "../data/cart.js";
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import formatCurrency from './utils/money.js';
+import { userAccountButton } from "./amazon.js";
 
-// Function to save orders to local storage
-function saveOrders(orders) {
-  localStorage.setItem('orders', JSON.stringify(orders));
-  console.log(orders);
+//console.log(document.cookie);
+
+
+// Helper function to get user_id from cookies
+export function getUserIdFromCookies() {
+  const cookies = document.cookie.split('; ');
+  const userCookie = cookies.find(cookie => cookie.startsWith('user='));
+  
+  if (userCookie) {
+    const userJson = userCookie.split('=')[1]; // Get the JSON string
+    const user = JSON.parse(userJson); // Parse it into an object
+    return user.id; // Return the user ID
+  }
+
+  return null; // Return null if the cookie is not found
 }
 
-// Function to delete an order
-function deleteOrder() {
-  document.querySelectorAll('.js-delete-order-button').forEach((button) => {
-    button.addEventListener('click', () => {
-      const orderId = button.dataset.orderId;
-      
-      // Remove the order from local storage
-      let orders = JSON.parse(localStorage.getItem('orders')) || [];
-      orders = orders.filter(order => order.order_id !== orderId);
-      saveOrders(orders);
-
-      // Remove the order from the DOM
-      button.closest('.order-container').remove();
-    });
-  });
-}
 
 // Fetch data from API and load the orders page
 async function loadPage() {
-  //hằng tạm thời cho orderId.
-  //note: tracking tạm thời vô hiệu hoá,
-  const orderId = 'mLUYrHnNomBKg2HMjVmW'; // Replace this with dynamic retrieval if available
-  
+  const userId = getUserIdFromCookies();
+  if (!userId) {
+    console.error('User ID not found in cookies');
+    return;
+  }
+
   try {
-    const response = await fetch(`http://localhost:8082/api/order-details?order_id=${orderId}`); // Replace 'YOUR_API_ENDPOINT' with the actual API URL
-    const orderData = await response.json();
+    const ordersResponse = await fetch(`http://localhost:8082/api/order-history?user_id=${userId}`);
+    const ordersData = await ordersResponse.json();
 
-    // Ensure orders is an array
-    const orders = Array.isArray(orderData) ? orderData : [orderData];
-    saveOrders(orders);
+    // Sắp xếp đơn hàng theo thời gian giảm dần (đơn hàng mới nhất lên trên)
+    ordersData.sort((a, b) => {
+      const dateA = dayjs(a.order_created_at);
+      const dateB = dayjs(b.order_created_at);
+      return dateB.isBefore(dateA) ? -1 : 1; // Sắp xếp giảm dần
+    });
 
-    // Generate HTML for orders
     let ordersHTML = '';
-    orders.forEach((order) => {
-      const orderTimeString = dayjs(order.order_created_at).format('MMMM D');
+    for (const order of ordersData) {
+      const orderDetailsResponse = await fetch(`http://localhost:8082/api/order-details?order_id=${order.order_id}`);
+      const orderDetails = await orderDetailsResponse.json();
+
+      // Ensure orderDetails is valid
+      if (!orderDetails || !orderDetails.order_id) {
+        console.error('Invalid orderDetails or missing order_id');
+        continue; // Skip invalid orders
+      }
+
+      const orderTimeString = dayjs(orderDetails.order_created_at).format('MMMM D');
       ordersHTML += `
         <div class="order-container">
           <div class="order-header">
@@ -53,82 +62,43 @@ async function loadPage() {
               </div>
               <div class="order-total">
                 <div class="order-header-label">Total:</div>
-                <div class="js-order-total" data-order-id="${order.order_id}">
-                  $${formatCurrency(order.order_cost_cents)}
+                <div class="js-order-total" data-order-id="${orderDetails.order_id}">
+                  $${formatCurrency(orderDetails.order_cost_cents)}
                 </div>
               </div>
             </div>
 
-            <button class="delete-order-button js-delete-order-button"
-              data-order-id="${order.order_id}">
+            <button class="delete-order-button js-delete-order-button" data-order-id="${orderDetails.order_id}">
               Delete
             </button>
 
             <div class="order-header-right-section">
               <div class="order-header-label">Order ID:</div>
-              <div>${order.order_id}</div>
+              <div>${orderDetails.order_id}</div>
             </div>
           </div>
 
           <div class="order-details-grid">
-            ${productsListHTML(order.products)}
+            ${productsListHTML(orderDetails.products, orderDetails)}  <!-- Pass orderDetails here -->
           </div>
         </div>
       `;
-    });
+    }
 
     document.querySelector('.js-orders-grid').innerHTML = ordersHTML;
 
-    // Update cart quantity in header
-    function updateCartQuantity() {
-      const cartQuantity = calculateCartQuantity();
-      document.querySelector('.order-cart-quantity').innerHTML = cartQuantity;
-    }
     updateCartQuantity();
 
-    // Add "Buy Again" button functionality
-    document.querySelectorAll('.js-buy-again-button').forEach((button) => {
-      button.addEventListener('click', () => {
-        const productId = button.dataset.productId;
-        addToCart(productId);
+    addBuyAgainFunctionality();
 
-        // Update product quantity and order cost
-        const order = orders.find(order => 
-          order.products.some(product => product.product_id === productId)
-        );
-        const product = order.products.find(product => product.product_id === productId);
-        
-        product.quantity++;
-        
-        const productDetails = order.products.find(p => p.product_id === productId);
-        order.order_cost_cents += productDetails.price_cents * 1.1; // Assuming price includes tax
-
-        // Update the quantity and total cost in the DOM
-        document.querySelector(`.js-product-quantity[data-product-id="${productId}"]`).innerHTML = `Quantity: ${product.quantity}`;
-        document.querySelector(`.js-order-total[data-order-id="${order.order_id}"]`).innerHTML = `$${formatCurrency(order.order_cost_cents)}`;
-        
-        saveOrders(orders);
-        
-        button.innerHTML = 'Added';
-        setTimeout(() => {
-          button.innerHTML = `
-            <img class="buy-again-icon" src="../images/icons/buy-again.png">
-            <span class="buy-again-message">Buy it again</span>
-          `;
-        }, 1000);
-
-        updateCartQuantity();
-      });
-    });
-
-    deleteOrder();
   } catch (error) {
     console.error('Error fetching order data:', error);
   }
 }
 
+
 // Function to generate HTML for each product in an order
-function productsListHTML(products) {
+function productsListHTML(products, orderDetails) {
   return products.map(product => `
     <div class="product-image-container">
       <img src="../${product.product_image}">
@@ -154,7 +124,7 @@ function productsListHTML(products) {
     </div>
 
     <div class="product-actions">
-      <a href="tracking.html?orderId=${product.product_id}">
+      <a href="tracking.html?orderId=${orderDetails.order_id}&productId=${product.product_id}">
         <button class="track-package-button button-secondary">
           Track package
         </button>
@@ -163,4 +133,36 @@ function productsListHTML(products) {
   `).join('');
 }
 
+
+// Function to update cart quantity in header
+function updateCartQuantity() {
+  const cartQuantity = calculateCartQuantity();
+  document.querySelector('.order-cart-quantity').innerHTML = cartQuantity;
+}
+
+// Add functionality to "Buy Again" buttons
+function addBuyAgainFunctionality() {
+  document.querySelectorAll('.js-buy-again-button').forEach((button) => {
+    button.addEventListener('click', () => {
+      const productId = button.dataset.productId;
+      addToCart(productId);
+
+      // Update UI
+      button.innerHTML = 'Added';
+      setTimeout(() => {
+        button.innerHTML = `
+          <img class="buy-again-icon" src="../images/icons/buy-again.png">
+          <span class="buy-again-message">Buy it again</span>
+        `;
+      }, 1000);
+
+      updateCartQuantity();
+    });
+  });
+}
+
+// Call loadPage to load the orders on page load
 loadPage();
+
+
+window.addEventListener('DOMContentLoaded', userAccountButton);

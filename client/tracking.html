@@ -38,7 +38,26 @@
         </button>
       </div>
 
-      <div class="amazon-header-right-section">        
+      <div class="amazon-header-right-section">
+        <div class="account-dropdown" id="accountDropdown">
+          <a href="./sign-in.html" class="header-link" style="margin-top: 5px; width: 100%; text-align: center;">
+            <span id="welcome-msg" style="font-size: 12px; padding: 0; margin: 0;" class="limit-text-to-1-line">
+              Hello, Sign in
+            </span>
+  
+            <span style="font-size: 14px; color: white; font-weight: 700;">Account & Lists</span>
+          </a>
+          
+          <div class="dropdown-content">
+            <ul>
+              <li><a href="#">Account</a></li>
+              <li><a href="./orders.html">Orders</a></li>
+              <li><a href="#">Recommendations</a></li>
+              <li><a id="auth-link" href="#">Sign In</a></li>
+            </ul>
+          </div>
+        </div>
+                
         <a class="orders-link header-link" href="./orders.html">
           <span class="returns-text">Returns</span>
           <span class="orders-text">& Orders</span>

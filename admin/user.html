@@ -8,6 +8,7 @@
   <title>Users Control</title>
   <link rel="stylesheet" href="/static/styles/navbar-shared.css">
   <link rel="stylesheet" href="/static/styles/product-user.css">
+  <link rel="stylesheet" href="/static/styles/pagination-css/orderPagination.css">
 </head>
 
 <body>
@@ -22,7 +23,7 @@
   
       <img src="../images/admin-pfp.jpg" class="admin-pfp">
 
-      <ul class="sidebar-menu">
+      <ul class="sidebar-menu" style="margin-top: 16px;"> <!--bonus-->
         <!--Overview/Home page-->
         <li>
           <a href="/admin/overview" onclick="showSection('overview')">
@@ -65,7 +66,7 @@
         
         <!--Logout link.-->
         <li>
-          <a href="#" onClick="logout();" style="margin-top: 85px;">
+          <a href="#" onClick="logout();" style="margin-top: 60px;">
             <img class="sidebar-icon" src="../images/admin-sidebar-icons/icons8-logout-50.png" alt="home-icon">
             Log Out
           </a>
@@ -73,12 +74,12 @@
       </ul>
     </div>
 
-    <div class="content" style="margin-top: -70px; margin-left: -96px; width: 1800px;">
+    <div class="content" style="margin-top: -40px; margin-left: -80px; width: 1800px;">
       <!-- Main Content -->
       <div class="container sized-container">
         <!-- User Form Section -->
         <div class="user-container">
-          <h2 class="section-title">Users</h2>
+          <h1 class="section-title">Users</h2>
 
           <div class="search-user">
             <h3>Search for user:</h3>
@@ -103,6 +104,13 @@
                 <!-- User rows will be dynamically inserted here -->
               </tbody>
             </table>
+
+            <!--paging of products list.-->
+            <div id="paginationControls" class="pagination-controls">
+              <button id="prevPage" disabled>Previous</button>
+              <span id="pageInfo"></span>
+              <button id="nextPage">Next</button>
+            </div>
           </div>
 
           <h2 class="section-title">Add New User</h2>

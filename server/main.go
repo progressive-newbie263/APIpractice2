@@ -78,10 +78,11 @@ func handleRequests() {
 
 	//orderAPI
 	//create order will create and fill in database both order_user and orders.
-	myRouter.HandleFunc("/api/orders", orderHandler.CreateOrder).Methods("POST") //post cart to get order. 
-	myRouter.HandleFunc("/api/all-orders", orderHandler.GetAllOrders).Methods("GET") //get all orders in db
+	myRouter.HandleFunc("/api/orders", orderHandler.CreateOrder).Methods("POST") //post cart ==> order. 
+	myRouter.HandleFunc("/api/all-orders", orderHandler.GetAllOrders).Methods("GET") //lấy all orders in db
 	myRouter.HandleFunc("/api/order-details", orderHandler.GetOrderDetails).Methods("GET") // test; thêm ?order_id={orderId} vào: http://localhost:8082/api/order-details?order_id=Ig1cWE2tOMXzpC9mvfxo
-	
+	myRouter.HandleFunc("/api/order-history", orderHandler.GetOrdersByUserID).Methods("GET") //api này dùng để truy ra toàn bộ lịch sử order của 1 user.
+	//order cần viết 1 api post ở dưới đây. Cho phép khi ng dùng xoá order hoặc admin xoá order thì nó sẽ xoá luôn order trong db
 
 	//middleware code which allows connections to database from outer source (?)
 	c := cors.New(cors.Options{

@@ -192,7 +192,8 @@ function searchForProductEnter() {
 
 //sign-in scripts.
 //for login/ logout button toggling
-window.addEventListener('DOMContentLoaded', function (event) {
+
+export function userAccountButton (event) {
   event.preventDefault();
   //const user = JSON.parse(localStorage.getItem('user'));
   function getCookie(name) {
@@ -212,35 +213,6 @@ window.addEventListener('DOMContentLoaded', function (event) {
   const darkOverlay = document.getElementById('darkOverlay');
   const dropdownContent = accountDropdown.querySelector('.dropdown-content');
   const signInLink = document.querySelector('a[href="./sign-in.html"]'); //to remove redirect to login page if user already logged in
-
-  /* 
-  function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-      const later = () => {
-        clearTimeout(timeout);
-        func(...args);
-      };
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-    };
-  }
-
-  // Debounced event handlers
-  const debouncedMouseEnter = debounce(function() {
-    //console.log("changed");
-    darkOverlay.classList.add('active');
-    dropdownContent.classList.add('active');
-  }, 100);
-
-  const debouncedMouseLeave = debounce(function() {
-    darkOverlay.classList.remove('active');
-    //dropdownContent.classList.remove('active');
-  }, 100);
-
-  accountDropdown.addEventListener('mouseenter', debouncedMouseEnter);
-  accountDropdown.addEventListener('mouseleave', debouncedMouseLeave);
-  */
 
   if (user) {
     if (user.role === 'admin') {
@@ -281,7 +253,9 @@ window.addEventListener('DOMContentLoaded', function (event) {
       window.location.href = './sign-in.html'; // Redirect to the login page
     });
   }
-});
+}
+
+window.addEventListener('DOMContentLoaded', userAccountButton);
 
 
 

@@ -4,18 +4,36 @@ import { getDeliveryOption } from "../../data/deliveryOptions.js";
 import formatCurrency from "../utils/money.js";
 import { addOrder } from "../../data/order.js";
 
-/* 
-  Note: https://supersimplebackend.dev/orders is used as an external source for order ID at the moment. We need to change it.
-  View source/guidance: https://supersimplebackend.dev/documentation#post-orders
-*/
-
 // Function to check if the user is logged in
 // If logged in, clicking the order button will function as normal. Otherwise, return the user to the login page.
 function isLoggedIn() {
-  const user = localStorage.getItem('user');
-  return user !== null; // User is logged in if this returns true
+  const userId = getUserIdFromCookie();  // Get the user ID from cookies
+  console.log("User ID in isLoggedIn:", userId); // Debug log to check the userId
+  return userId !== null; // Return true if user is logged in
 }
 
+// Function to get user ID from the cookie
+function getUserIdFromCookie() {
+  const cookies = document.cookie.split(';');
+  for (let cookie of cookies) {
+    cookie = cookie.trim(); // Remove leading/trailing spaces
+    if (cookie.startsWith('user=')) {
+      const cookieValue = cookie.substring('user='.length); // Get the cookie value after "user="
+      try {
+        const user = JSON.parse(cookieValue); // Try parsing the JSON
+        console.log("User cookie parsed:", user); // Debug log to check the parsed user object
+        return user.id || null; // Return user id if found, else null
+      } catch (error) {
+        console.error("Error parsing user cookie:", error); // Log error if JSON is invalid
+        return null; // Return null if parsing fails
+      }
+    }
+  }
+  console.log("User cookie not found or incorrect format"); // Log when cookie is not found
+  return null; // Return null if no "user" cookie is found
+}
+
+// Function to render the payment summary
 export function renderPaymentSummary() {
   let productPriceCents = 0;
   let shippingPriceCents = 0;
@@ -68,9 +86,7 @@ export function renderPaymentSummary() {
       return;
     }
 
-    // Retrieve the userId from localStorage
-    const user = JSON.parse(localStorage.getItem('user'));
-    const userId = user ? user.id : null;
+    const userId = getUserIdFromCookie();  // Get user ID from cookie
 
     if (!userId) {
       console.error("User ID not found. Unable to place order.");
@@ -86,14 +102,12 @@ export function renderPaymentSummary() {
     try {      
       console.log("Request Body:", cartWithUserId);
 
-      //const response = await fetch('https://supersimplebackend.dev/orders', {
       const response = await fetch('http://localhost:8082/api/orders', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(cartWithUserId),
-        //credentials: 'include',
       });
 
       if (!response.ok) {
@@ -105,38 +119,35 @@ export function renderPaymentSummary() {
       addOrder(order);
       console.log("Order placed successfully:", order);
 
-      //console.log(cart);
       // Optional: Reset cart after successful order
       localStorage.removeItem('cart');
       window.location.href = './orders.html';
     } catch (error) {
       console.error('Unexpected error. Try again later:', error);
-      //console.log(cartWithUserId);
     }
   });
 }
 
-
-//demo data test
+// Demo data for testing purposes
 const demoOrder = [
   {
-      "user_id" : 3,
-      "productId": "e4f64a65-1377-42bc-89a5-e572d19252e2",
-      "quantity": 6,
-      "deliveryOptionId": "3"
+    "user_id": 3,
+    "productId": "e4f64a65-1377-42bc-89a5-e572d19252e2",
+    "quantity": 6,
+    "deliveryOptionId": "3"
   },
   {
-      "user_id" : 3,
-      "productId": "aad29d11-ea98-41ee-9285-b916638cac4a",
-      "quantity": 3,
-      "deliveryOptionId": "2"
+    "user_id": 3,
+    "productId": "aad29d11-ea98-41ee-9285-b916638cac4a",
+    "quantity": 3,
+    "deliveryOptionId": "2"
   },
   {
-      "user_id" : 3,
-      "productId": "dd82ca78-a18b-4e2a-9250-31e67412f98d",
-      "quantity": 8,
-      "deliveryOptionId": "2"
+    "user_id": 3,
+    "productId": "dd82ca78-a18b-4e2a-9250-31e67412f98d",
+    "quantity": 8,
+    "deliveryOptionId": "2"
   }
-]
+];
 
-console.log("demo order: ",demoOrder);
+console.log("demo order: ", demoOrder);

@@ -1,0 +1,68 @@
+/* Footer styling */
+.amazon-footer {
+  background-color: #232f3e;
+  color: #fff;
+  font-family: 'Roboto', sans-serif;
+  padding: 20px 40px;
+  margin-top: 200px;
+  
+}
+
+.footer-top {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.back-to-top-link {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.footer-columns {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.footer-column {
+  flex: 1;
+  min-width: 150px;
+  padding: 10px;
+}
+
+.footer-column h4 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.footer-column ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-column ul li {
+  margin-bottom: 5px;
+}
+
+.footer-column ul li a {
+  color: #ddd;
+  text-decoration: none;
+}
+
+.footer-column ul li a:hover {
+  color: #fff;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.footer-logo img {
+  height: 30px;
+  margin-bottom: 10px;
+}
