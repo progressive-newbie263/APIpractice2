@@ -1,0 +1,70 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+
+.account-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.account-section-item {
+  display: flex;
+  flex-direction: row;
+  background-color: #ffffff;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  align-items: center;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.account-section-item:hover {
+  background-color: lightgray;
+}
+
+.account-section-item img.icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 40px;
+}
+
+.account-section-item h2{
+  font-weight: 400;
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #111;
+}
+
+.account-section-item p {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.account-section-item .link {
+  color: #0073e6;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.account-section-item .link:hover {
+  text-decoration: underline;
+}
+
+.item-content {
+  margin-left: 10px; 
+  align-items: center;
+}
+
+.item-content p {
+  font-size: 16px;
+}

@@ -24,7 +24,7 @@
             <ul class="sidebar-menu">
               <!--Overview/Home page-->
               <li>
-                <a href="/admin/overview" onclick="showSection('overview')">
+                <a href="/admin" onclick="showSection('overview')">
                   <img class="sidebar-icon" src="../images/admin-sidebar-icons/icons8-home-50.png" alt="home-icon">
                   Overview
                 </a>
@@ -82,15 +82,15 @@
             <div class="info-cards">
                 <div class="card">
                     <h3>Total Sales</h3>
-                    <p id="total-sales">$10,000</p>
+                    <p id="total-sales"></p>
                 </div>
                 <div class="card">
                     <h3>Total Orders</h3>
-                    <p id="total-orders">50</p>
+                    <p id="total-orders"></p>
                 </div>
                 <div class="card">
                     <h3>Total Users</h3>
-                    <p id="total-users">300</p>
+                    <p id="total-users"></p>
                 </div>
             </div>
 
@@ -134,30 +134,6 @@
 
     <script src="/static/scripts/index.js"></script>
     <script src="/static/scripts/logout.js"></script>
-    <script>
-        // Simulate data
-        document.getElementById('total-sales').innerText = "$10,000";
-        document.getElementById('total-orders').innerText = "120";
-        document.getElementById('total-users').innerText = "300";
-
-        // Add products dynamically to the table
-        const products = [
-            { id: 3, name: "Gaming Mouse", category: "Electronics", stock: 40, price: "$79.99" },
-            { id: 4, name: "Yoga Mat", category: "Sports", stock: 20, price: "$25.99" },
-        ];
-
-        const productTable = document.getElementById('product-table');
-        products.forEach(product => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${product.id}</td>
-                <td>${product.name}</td>
-                <td>${product.category}</td>
-                <td>${product.stock}</td>
-                <td>${product.price}</td>
-            `;
-            productTable.appendChild(row);
-        });
-    </script>
+    <script src="/static/scripts/utils/shopAttributes.js"></script>
 </body>
 </html>

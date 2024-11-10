@@ -23,14 +23,14 @@ func ProductPageHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl.Execute(w, nil)
 }
 
-func OverviewPageHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles("../admin/overview.html")
-	if err != nil {
-		http.Error(w, "Unable to load product page", http.StatusInternalServerError)
-		return
-	}
-	tmpl.Execute(w, nil)
-}
+// func OverviewPageHandler(w http.ResponseWriter, r *http.Request) {
+// 	tmpl, err := template.ParseFiles("../admin/overview.html")
+// 	if err != nil {
+// 		http.Error(w, "Unable to load product page", http.StatusInternalServerError)
+// 		return
+// 	}
+// 	tmpl.Execute(w, nil)
+// }
 
 func UserPageHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("../admin/user.html")

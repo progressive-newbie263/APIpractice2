@@ -61,8 +61,8 @@ function renderOrderList(orderArray) {
 
     // Convert to GMT+7
     const date = new Date(order.order_created_at);
-    const gmt7Offset = 7 * 60; // Offset in minutes for GMT+7
-    const localDate = new Date(date.getTime() + gmt7Offset * 60 * 1000);
+    const gmt7Offset = 17 * 60 * 60 * 1000; // tham chiếu thời gian lệch phải cộng 17 tiếng thay vì 7 tiếng. Có vẻ giờ gốc là GMT-10.
+    const localDate = new Date(date.getTime() + gmt7Offset);
 
     // Format date as "Month Day, Year, HH:MM AM/PM"
     const formattedDate = localDate.toLocaleDateString("en-US", {

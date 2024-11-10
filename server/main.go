@@ -45,18 +45,25 @@ func handleRequests() {
 	//admin page route
 	myRouter.HandleFunc("/admin", adminHandler.AdminPageHandler).Methods("GET")
 	myRouter.HandleFunc("/admin/products", adminHandler.ProductPageHandler).Methods("GET")
-	myRouter.HandleFunc("/admin/overview", adminHandler.OverviewPageHandler).Methods("GET")
 	myRouter.HandleFunc("/admin/users", adminHandler.UserPageHandler).Methods("GET")
 	myRouter.HandleFunc("/admin/orders", adminHandler.OrdersPageHandler).Methods("GET")
+
+	//admin page, thông số
+	myRouter.HandleFunc("/admin/total-sales", adminHandler.GetTotalSales).Methods("GET")
+	myRouter.HandleFunc("/admin/total-orders", adminHandler.GetTotalOrders).Methods("GET")
+	myRouter.HandleFunc("/admin/total-users", adminHandler.GetTotalUsers).Methods("GET")
+
+
+	//ảnh + js/css
 	myRouter.PathPrefix("/images/").Handler(http.StripPrefix("/images/", http.FileServer(http.Dir("../images"))))
 	myRouter.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("../admin/static"))))
 
 	//products API
 	myRouter.HandleFunc("/api/products", database.GetProductsHandler).Methods("GET")
 	myRouter.HandleFunc("/api/products/{id}", productHandler.SearchProductByIDHandler).Methods("GET")	//getting a specific product via searching its ID, finished successfully
-	myRouter.HandleFunc("/api/products", productHandler.CreateProductHandler).Methods("POST")		//posting/creating a brand new product, finished successfully
-	myRouter.HandleFunc("/api/products", productHandler.UpdateProductHandler).Methods("PUT")		//updating an existing product, finished successfully
-	myRouter.HandleFunc("/api/products", productHandler.DeleteProductHandler).Methods("DELETE")	//deleting a product from database
+	myRouter.HandleFunc("/api/products/create", productHandler.CreateProductHandler).Methods("POST")		//posting/creating a brand new product, finished successfully
+	myRouter.HandleFunc("/api/products/update", productHandler.UpdateProductHandler).Methods("PUT")		//updating an existing product, finished successfully
+	myRouter.HandleFunc("/api/products/delete", productHandler.DeleteProductHandler).Methods("DELETE")	//deleting a product from database
 
 	//users API, test cho vui. Khong su dung doan crud api user nay.
 	myRouter.HandleFunc("/users", database.GetUsersHandler).Methods("GET") //getting all users inside database //done

@@ -23,12 +23,12 @@ function renderOrderDetails(orderDetails) {
 
   // tạo model mới cho order.
   const orderDetailsContainer = document.createElement("div");
-  orderDetailsContainer.className = "order-details-container"; // Add a class for styling
+  orderDetailsContainer.className = "order-details-container"; // Add class cho container
 
   // Chuyển về múi giờ GMT+7
   const ConvertToGMT7 = (dateString) => {
     const date = new Date(dateString);
-    const gmt7Offset = 7 * 60 * 60 * 1000; // GMT+7, millisec
+    const gmt7Offset = 17 * 60 * 60 * 1000; // GMT+7, millisec. Tuy nhiên order bị chậm 10 tiếng ?? nên tăng lên 17 tiếng 
     return new Date(date.getTime() + gmt7Offset);
   };
 

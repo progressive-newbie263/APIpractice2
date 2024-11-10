@@ -1,11 +1,14 @@
-// completed , worked.
 package productHandler
 
 import (
-	"database/sql" //to get sql.NullString type
+	"database/sql" // để sử dụng sql.NullString
 	"encoding/json"
 	"fmt"
+	"math/rand"
 	"net/http"
+	"strings"
+	"time"
+
 	"server/database"
 )
 
@@ -24,9 +27,39 @@ type Product struct {
 	WarrantyLink     sql.NullString `json:"warrantylink"`
 }
 
+// Custom function to generate UUID similar to JavaScript's generateUUID()
+func generateUUID() string {
+	const uuidFormat = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx"
+	const hexChars = "0123456789abcdef"
+	var uuid strings.Builder
+	rand.Seed(time.Now().UnixNano())
+
+	for i, c := range uuidFormat {
+		if c == 'x' {
+			uuid.WriteByte(hexChars[rand.Intn(16)])
+		} else if c == 'y' {
+			// 'y' will be one of '8', '9', 'a', or 'b'
+			uuid.WriteByte(hexChars[(rand.Intn(4)+8)])
+		} else {
+			uuid.WriteByte(byte(c))
+		}
+
+		// Ensure the 15th character is '4' (index 14)
+		if i == 14 {
+			uuid.WriteByte('4')
+		}
+	}
+
+	return uuid.String()
+}
+
 // Function to insert product into the database
 func CreateProduct(product *Product) error {
-	//add in id upon creating new prods
+	// Generate a custom UUID if the product ID is empty
+	if product.ID == "" {
+		product.ID = generateUUID()
+	}
+
 	query := `
 		INSERT INTO products (
 			id,
@@ -44,17 +77,18 @@ func CreateProduct(product *Product) error {
 	`
 	_, err := database.DB.Exec(
 		query,
-		&product.ID,
-		&product.Image,
-		&product.Name,
-		&product.RatingStars,
-		&product.RatingCount,
-		&product.PriceCents,
-		&product.Keywords,
-		&product.Type,
-		&product.SizeChartLink,
-		&product.InstructionsLink,
-		&product.WarrantyLink)
+		product.ID,
+		product.Image,
+		product.Name,
+		product.RatingStars,
+		product.RatingCount,
+		product.PriceCents,
+		product.Keywords,
+		product.Type,
+		product.SizeChartLink,
+		product.InstructionsLink,
+		product.WarrantyLink,
+	)
 
 	if err != nil {
 		return fmt.Errorf("failed to insert product: %v", err)
