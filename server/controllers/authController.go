@@ -33,13 +33,13 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 	// Raw SQL query to insert user data
 	query := `
-		INSERT INTO users (name, email, password, role) 
-		VALUES ($1, $2, $3, $4) 
+		INSERT INTO users (name, email, password, role, location) 
+		VALUES ($1, $2, $3, $4, $5) 
 		RETURNING id;
 	`
 	// Execute the query and retrieve the new user's ID
 	var userID int
-	err = database.DB.QueryRow(query, user.Name, user.Email, user.Password, user.Role).Scan(&userID)
+	err = database.DB.QueryRow(query, user.Name, user.Email, user.Password, user.Role, user.Location).Scan(&userID)
 	if err != nil {
 		http.Error(w, "Failed to insert user: "+err.Error(), http.StatusInternalServerError)
 		return
@@ -62,7 +62,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	var user database.User
 
-	query := `SELECT id, name, email, password, role FROM users WHERE email = $1 LIMIT 1`
+	query := `SELECT id, name, email, password, role, location FROM users WHERE email = $1 LIMIT 1`
 
 	// Execute the query and scan the result into the user struct
 	err := database.DB.QueryRow(query, data["email"]).Scan(
@@ -70,7 +70,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		&user.Name,
 		&user.Email,
 		&user.Password,
-		&user.Role)
+		&user.Role,
+		&user.Location)
 
 	if err != nil {
 		// User not found in the database
@@ -101,8 +102,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		Value:    token,
 		Expires:  time.Now().Add(time.Hour * 24), // 1 day
 		HttpOnly: true,
-		//Domain:   "localhost",
-
 		//notice: this is added. to make sure it is accessible across site.
 		Path: "/",
 		SameSite: http.SameSiteNoneMode, //cross-origin access 
@@ -116,8 +115,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	} else {
 		redirectURL = "./client/amazon.html" // Redirect to client page
 	}
-
-	
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]interface{}{
@@ -150,14 +147,15 @@ func User(w http.ResponseWriter, r *http.Request) {
 
 	var user database.User
 
-	query := `SELECT id, name, email, password, role FROM users WHERE id = $1 LIMIT 1`
+	query := `SELECT id, name, email, password, role, location FROM users WHERE id = $1 LIMIT 1`
 
 	err = database.DB.QueryRow(query, claims.Issuer).Scan(
 		&user.ID,
 		&user.Name,
 		&user.Email,
 		&user.Password,
-		&user.Role)
+		&user.Role,
+		&user.Location)
 
 	if err != nil {
 		// User not found in the database

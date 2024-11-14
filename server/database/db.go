@@ -183,24 +183,25 @@ func SearchProductByID(productID string) (*Product, error) {
 }
 
 
-
-
-//queries for users TABLE:
+//queries cho bảng USERS
 type User struct {
     ID          int     `json:"id"`
-    Name 		string	`json:"name"`
+    Name        string  `json:"name"`
     Email       string  `json:"email"`
-    Password 	[]byte	`json:"password"`
-    Role        string `json:"role"`
+    Password    []byte  `json:"password"`
+    Role        string  `json:"role"`
+    Location    sql.NullString  `json:"location"`  // để nullstring, vì khi đăng kí, mình định không cho trường "Location" vào. Nó sẽ xuất hiện sau này, trong "Settings" của account.
 }
 
 func GetUsersHandler(w http.ResponseWriter, r *http.Request) {
     rows, err := DB.Query(`
         SELECT 
             id,
-            email,  
+            email,
             password,
-            name
+            name,
+            role,         
+            location     
         FROM users
     `)
     if err != nil {
@@ -214,39 +215,43 @@ func GetUsersHandler(w http.ResponseWriter, r *http.Request) {
         var user User
         err := rows.Scan(
             &user.ID,
-            &user.Email,  
+            &user.Email,
             &user.Password,
-            &user.Name, 
+            &user.Name,
+            &user.Role,         // Scan cột role
+            &user.Location,     // Scan cột location
         )
         if err != nil {
             http.Error(w, "Failed to scan row", http.StatusInternalServerError)
             return
         }
-        
+
         users = append(users, user)
     }
 
-    // Convert products slice to JSON
     w.Header().Set("Content-Type", "application/json")
     json.NewEncoder(w).Encode(users)
 }
 
-// Internal function to query product by ID
 func SearchUserByID(userID int) (*User, error) {
     var user User
 
     query := `SELECT 
         id,
-        email,  
+        email,
         password,
-        name
+        name,
+        role,         
+        location     
     FROM users WHERE id = $1`
 
     err := DB.QueryRow(query, userID).Scan(
         &user.ID,
-        &user.Email,  
+        &user.Email,
         &user.Password,
-        &user.Name, 
+        &user.Name,
+        &user.Role,         // Scan role
+        &user.Location,     // Scan location
     )
     if err != nil {
         if err == sql.ErrNoRows {
@@ -259,62 +264,4 @@ func SearchUserByID(userID int) (*User, error) {
 }
 
 
-/*
-    paging handler (this one is used for creating 
-    a counting list that only shows a certain amount of
-    products for each pages/counting numbers)
-*/
-// func GetPaginatedProducts(w http.ResponseWriter, r *http.Request) {
-//     // Get page number from query parameters
-//     page := r.URL.Query().Get("page")
-//     if page == "" {
-//         page = "1"
-//     }
-/*
-//     // Convert page to integer
-//     pageNum, err := strconv.Atoi(page)
-//     if err != nil {
-//         http.Error(w, "Invalid page number", http.StatusBadRequest)
-//         return
-//     }
 
-//     // Number of products per page
-//     pageSize := 10
-//     offset := (pageNum - 1) * pageSize
-
-//     // Fetch products with pagination
-//     query := `SELECT * FROM products LIMIT $1 OFFSET $2`
-//     rows, err := DB.Query(query, pageSize, offset)
-//     if err != nil {
-//         http.Error(w, "Error fetching products", http.StatusInternalServerError)
-//         return
-//     }
-//     defer rows.Close()
-
-//     // Process products and send response
-//     var products []Product
-//     for rows.Next() {
-//         var product Product
-//         err := rows.Scan(
-//             &product.ID,
-//             &product.Image,  
-//             &product.Name,
-//             &product.RatingStars,
-//             &product.RatingCount,
-//             &product.PriceCents, 
-//             &product.Keywords,
-//             &product.Type,
-//             &product.SizeChartLink,
-//             &product.InstructionsLink,
-//             &product.WarrantyLink, 
-//         )
-//         if err != nil {
-//             http.Error(w, "Error scanning product", http.StatusInternalServerError)
-//             return
-//         }
-//         products = append(products, product)
-//     }
-
-//     json.NewEncoder(w).Encode(products)
-// }
-*/

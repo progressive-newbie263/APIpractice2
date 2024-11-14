@@ -10,7 +10,7 @@ import (
 
 	//internal:
 	"server/API/adminHandler"
-	//"server/API/cartHandler"
+	//"server/API/accountHandler"
 	"server/API/orderHandler"
 	"server/API/productHandler"
 	"server/API/userHandler"
@@ -90,6 +90,10 @@ func handleRequests() {
 	myRouter.HandleFunc("/api/order-details", orderHandler.GetOrderDetails).Methods("GET") // test; thêm ?order_id={orderId} vào: http://localhost:8082/api/order-details?order_id=Ig1cWE2tOMXzpC9mvfxo
 	myRouter.HandleFunc("/api/order-history", orderHandler.GetOrdersByUserID).Methods("GET") //api này dùng để truy ra toàn bộ lịch sử order của 1 user.
 	//order cần viết 1 api post ở dưới đây. Cho phép khi ng dùng xoá order hoặc admin xoá order thì nó sẽ xoá luôn order trong db
+
+	//API để chỉnh sửa thông tin cá nhân của người dùng:
+	//myRouter.HandleFunc("/api/user-settings/change-name", accountHandler.ChangeUserName).Methods("PUT");
+
 
 	//middleware code which allows connections to database from outer source (?)
 	c := cors.New(cors.Options{

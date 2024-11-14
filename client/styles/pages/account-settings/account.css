@@ -1,0 +1,116 @@
+/* account_settings.css */
+
+* {
+  font-family: Roboto, sans-serif;
+}
+
+body {
+  padding-top: 75px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f4f4f9;
+  color: #333;
+}
+
+.container {
+  width: 100%;
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+.security-section {
+  background-color: #fff;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.section-title {
+  font-size: 32px;
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+
+.section-heading {
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 20px;
+}
+
+.field {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.field label {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.field-value {
+  display: flex;
+  align-items: center;
+}
+
+.field-value span {
+  margin-right: 10px;
+  font-size: 16px;
+  color: #555;
+}
+
+.edit-btn,
+.edit-btn-locked {
+  background-color: #f3a847;
+  border: none;
+  width: 150px;
+  padding: 8px 0;
+  font-size: 14px;
+  color: white;
+  cursor: pointer;
+  border-radius: 20px;
+}
+
+.edit-btn:hover,
+.edit-btn-locked:hover {
+  background-color: #f29420;
+}
+
+.security-options .field:last-child {
+  margin-bottom: 0;
+}
+
+footer {
+  width: 100%;
+}
+
+
+.link-to-account {
+  text-decoration: none;
+  transition: ease-in-out 0.2s;
+}
+
+.link-to-account:hover {
+  text-decoration: underline;
+  color: rgb(189, 90, 90);
+}
+
+.label-and-span {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.black-line-thin {
+  height: 1px;
+  background: rgb(185, 184, 184);
+  margin-bottom: 20px;
+}
+
+
+

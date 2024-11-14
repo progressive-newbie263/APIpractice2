@@ -9,7 +9,10 @@ import {
   Appliance,
 } from "../data/products.js";
 
-loadProducts(renderProductsGrid);
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadProducts(renderProductsGrid);
+});
 
 function renderProductsGrid(filteredProducts) {
   let productsHTML = '';
@@ -89,14 +92,12 @@ function renderProductsGrid(filteredProducts) {
     if (previousTimeoutId) {
       clearTimeout(previousTimeoutId);
     }
-
     const timeoutId = setTimeout(() => {
       addedMessage.classList.remove('unhidden');
     }, 2000);
     // Save the timeoutId for this product so we can stop it later if we need to.
     addedMessageTimeouts[productId] = timeoutId;
   }
-
 
   //make sure when using dataset, change from kebab case (product-name)
   //into camel case (productName) (and so on...)
@@ -189,22 +190,20 @@ function searchForProductEnter() {
 }
 
 
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
 
 //sign-in scripts.
 //for login/ logout button toggling
 
-export function userAccountButton (event) {
-  event.preventDefault();
-  //const user = JSON.parse(localStorage.getItem('user'));
-  function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-  }
+export function userAccountButton () {
   // Get the 'user' cookie
   const userCookie = getCookie('user');
   const user = userCookie ? JSON.parse(userCookie) : null;
-
 
   const welcomeMsg = document.getElementById('welcome-msg');
   const authLink = document.getElementById('auth-link');

@@ -1,97 +1,77 @@
-// completed , worked.
-package productHandler
+// JavaScript to handle the edit button clicks and show the popup form with dynamic labels
 
-import (
-	"database/sql" //to get sql.NullString type
-	"encoding/json"
-	"fmt"
-	"net/http"
-	"server/database"
-	"github.com/google/uuid"
-)
+document.querySelectorAll('.edit-btn').forEach((button) => {
+  button.addEventListener('click', () => {
+    const fieldType = button.closest('.field').querySelector('label').getAttribute('for');
 
-// Define the structure for the product
-type Product struct {
-	ID               string         `json:"id"`
-	Image            string         `json:"image"`
-	Name             string         `json:"name"`
-	RatingStars      float64        `json:"ratingstars"`
-	RatingCount      int            `json:"ratingcount"`
-	PriceCents       int            `json:"pricecents"`
-	Keywords         string         `json:"keywords"`
-	Type             string         `json:"type"`
-	SizeChartLink    sql.NullString `json:"sizechartlink"`
-	InstructionsLink sql.NullString `json:"instructionslink"`
-	WarrantyLink     sql.NullString `json:"warrantylink"`
-}
+    // Set the popup label based on the field type
+    let label;
+    switch (fieldType) {
+      case 'password':
+        label = 'New Password';
+        break;
+      case 'name':
+        label = 'New Name';
+        break;
+      case 'location':
+        label = 'New Location';
+        break;
+      default:
+        label = 'New Value';
+    }
 
-// Function to insert product into the database
-func CreateProduct(product *Product) error {
-	// Generate a UUID if the product ID is empty
-	if product.ID == "" {
-		product.ID = uuid.New().String()
-	}
-	//add in id upon creating new prods
-	query := `
-		INSERT INTO products (
-			id,
-			image,  
-			name,
-			ratingstars,
-			ratingcount,
-			pricecents,
-			keywords,
-			type,
-			sizechartlink,
-			instructionslink,
-			warrantylink 
-		) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
-	`
-	_, err := database.DB.Exec(
-		query,
-		&product.ID,
-		&product.Image,
-		&product.Name,
-		&product.RatingStars,
-		&product.RatingCount,
-		&product.PriceCents,
-		&product.Keywords,
-		&product.Type,
-		&product.SizeChartLink,
-		&product.InstructionsLink,
-		&product.WarrantyLink)
+    // Create the popup HTML with dynamic label
+    const popupHTML = `
+      <div class="popup">
+        <div class="popup-content">
+          <h2>Update ${fieldType.charAt(0).toUpperCase() + fieldType.slice(1)}</h2>
+          <form id="updateForm">
+            <label for="currentPassword">Current Password:</label>
+            <input type="password" id="currentPassword" name="currentPassword" required>
+            
+            <label for="newValue">${label}:</label>
+            <input type="${fieldType === 'password' ? 'password' : 'text'}" id="newValue" name="newValue" required>
+            
+            <label for="confirmNewValue">Confirm ${label}:</label>
+            <input type="${fieldType === 'password' ? 'password' : 'text'}" id="confirmNewValue" name="confirmNewValue" required>
 
-	if err != nil {
-		return fmt.Errorf("failed to insert product: %v", err)
-	}
+            <button type="submit">Update</button>
+            <button type="button" id="cancelButton">Cancel</button>
+          </form>
+        </div>
+      </div>
+    `;
 
-	return nil
-}
+    // Append popup to the body
+    document.body.insertAdjacentHTML('beforeend', popupHTML);
 
-// Function to handle creating a new product
-func CreateProductHandler(w http.ResponseWriter, r *http.Request) {
-	// Only allow POST method
-	if r.Method != http.MethodPost {
-		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
-		return
-	}
+    // Handle form submission
+    document.getElementById('updateForm').addEventListener('submit', (e) => {
+      e.preventDefault();
 
-	// Parse the request body to extract product data
-	var product Product
-	err := json.NewDecoder(r.Body).Decode(&product)
-	if err != nil {
-		http.Error(w, "Failed to parse request body", http.StatusBadRequest)
-		return
-	}
+      const currentPassword = document.getElementById('currentPassword').value;
+      const newValue = document.getElementById('newValue').value;
+      const confirmNewValue = document.getElementById('confirmNewValue').value;
 
-	// Insert the product into the database
-	err = CreateProduct(&product)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+      if (newValue !== confirmNewValue) {
+        alert("New value and confirmation do not match.");
+        return;
+      }
 
-	// Send success response
-	w.WriteHeader(http.StatusCreated)
-	fmt.Fprintf(w, "Product created successfully")
-}
+      // Placeholder check for current password (implement real check here)
+      if (currentPassword === 'your_actual_password') {
+        alert(`${fieldType.charAt(0).toUpperCase() + fieldType.slice(1)} updated successfully!`);
+        document.querySelector(`#user-${fieldType}`).innerText = newValue;
+        document.querySelector('.popup').remove();
+      } else {
+        alert("Current password is incorrect.");
+      }
+    });
+
+    // Handle cancel button
+    document.getElementById('cancelButton').addEventListener('click', () => {
+      document.querySelector('.popup').remove();
+    });
+  });
+});
+,

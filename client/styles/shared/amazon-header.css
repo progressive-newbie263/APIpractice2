@@ -168,6 +168,7 @@
 }
 
 #welcome-msg {
+  max-width: 100px;
   margin-top: 5px;
   font-size: 16px;
   padding: 10px;

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/png" sizes="32x32" href="../../images/ice-icon-1.png">
+    <title>
+      Account Settings
+    </title>
+  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <!-- Load the Roboto font from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/pages/personaliztion.css">
+    <link rel="stylesheet" href="../styles/pages/account-settings/account.css">
+    <link rel="stylesheet" href="../styles/pages/account-settings/popup-form.css">
+    <link rel="stylesheet" href="../styles/shared/amazon-header.css">
+    <link rel="stylesheet" href="../styles/shared/footer.css">
+    <link rel="stylesheet" href="../styles/shared/general.css">
+</head>
+
+<body>
+  <div class="amazon-header">
+      <div class="amazon-header-left-section">
+        <a href="../amazon.html" class="header-link">
+          <img class="amazon-logo"
+            src="../../images/amazon-logo-white.png">
+          <img class="amazon-mobile-logo"
+            src="../../images/amazon-mobile-logo-white.png">
+        </a>
+      </div>
+  
+      <div class="amazon-header-middle-section">
+        <input class="search-bar js-search-bar" type="text" placeholder="Search" name="searchInput">       
+        
+        <a id="js-search-area">
+          <button class="search-button js-search-button">
+            <img class="search-icon" src="../../images/icons/search-icon.png">
+          </button>
+        </a>
+      </div>
+  
+      <div class="amazon-header-right-section">
+        <div class="account-dropdown" id="accountDropdown">
+          <a href="../sign-in.html" class="header-link" style="margin-top: 5px; width: 100%; text-align: center;">
+            <span id="welcome-msg" style="font-size: 12px; padding: 0; margin: 0;" class="limit-text-to-1-line">
+              Hello, Sign in
+            </span>
+  
+            <span style="font-size: 14px; color: white; font-weight: 700;">Account & Lists</span>
+          </a>
+          
+          <div class="dropdown-content">
+            <ul>
+              <li><a href="../user-account.html">Account</a></li>
+              <li><a href="../orders.html">Orders</a></li>
+              <li><a href="#">Recommendations</a></li>
+              <li><a id="auth-link" href="#">Sign In</a></li>
+            </ul>
+          </div>
+        </div>
+  
+        <a class="orders-link header-link" href="../orders.html">
+          <span class="returns-text">Returns</span>
+          <span class="orders-text">& Orders</span>
+        </a>
+  
+        <a class="cart-link header-link" href="../checkout.html">
+          <img class="cart-icon" src="../../images/icons/cart-icon.png">
+          <div class="cart-quantity js-cart-quantity"></div>
+          <div class="cart-text">Cart</div>
+        </a>
+      </div>
+  </div>
+
+
+  <!--form-->
+  <main class="container">
+    <div class="opening">
+      <div style="margin-bottom: 20px;">
+        <a href="../user-account.html" class="link-to-account">Your account ></a>
+        <span style="margin-left: 15px;">Login & Security</span>
+      </div>
+    
+      <h2 class="section-title">Login & Security</h2>
+    </div>
+
+    <!--username-->
+    <div class="security-section">
+      <div class="field">
+        <div class="label-and-span">
+          <label for="name">Name</label>
+          <span id="user-name"></span>
+        </div>
+
+        <div class="field-value">  
+          <button class="edit-btn" data-field="name">Edit</button>
+        </div>
+      </div>
+
+      <div class="black-line-thin"></div>
+      
+      <!--EMail, locked-->
+      <div class="field">
+        <div class="label-and-span">
+          <label for="email">Email</label>
+          <span id="user-email"></span>
+        </div>
+
+        <div class="field-value">
+          <button class="edit-btn-locked" style="background-color: red; cursor: not-allowed;">Locked</button>
+        </div>
+      </div>
+
+      <div class="black-line-thin"></div>
+  
+      <!--change password-->
+      <div class="field">
+        <div class="label-and-span">
+          <label for="password">Password</label>
+          <!-- <span id="user-password"></span> --> <!--vô hiệu hoá mật khẩu ở screen chính. Chỉ để dạng sao. Xem edit mới được xem mật khẩu gốc-->
+          <span id="user-password"></span>
+        </div>
+
+        <div class="field-value">
+          <button class="edit-btn">Change</button>
+        </div>
+      </div>
+
+      <div class="black-line-thin"></div>
+
+      <!--change location-->
+      <div class="field">
+        <div class="label-and-span">
+          <label for="location">Location</label>
+          <span id="user-location">aaaa</span>
+        </div>
+
+        <div class="field-value">
+          <button class="edit-btn">Edit</button>
+        </div>
+      </div>
+
+      <div class="black-line-thin"></div>
+
+      <!--Verify-->
+      <div class="field">
+        <div class="label-and-span">
+          <label for="2fa">Two-Step Verification</label>
+          <span id="2fa-status">Enabled</span>
+        </div>  
+
+        <div class="field-value">
+          <button class="edit-btn-locked" style="cursor: not-allowed;">Disable</button>
+        </div>
+      </div>
+
+      <div class="black-line-thin"></div>
+      
+      <!--Security question-->
+      <div class="field">
+        <div class="label-and-span">
+          <label for="security-questions">Security Questions</label>
+          <span id="security-questions-status">Set</span>
+        </div>
+
+        <div class="field-value">
+          <button class="edit-btn-locked" style="cursor: not-allowed;">Edit</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Pop-up Modal -->
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <!--nút tắt (x)-->
+      <span class="close">&times;</span>
+
+      <h2 id="modal-title">Edit Field</h2>
+      
+      <form id="editForm">
+        <label for="current-password">Current Password:</label>
+        <input type="password" id="current-password" required>
+
+        <label for="new-data">New Value:</label>
+        <input type="text" id="new-data" required>
+
+        <label for="confirm-data">Confirm New Value:</label>
+        <input type="text" id="confirm-data" required>
+
+        <button type="submit" class="submit-btn">Save Changes</button>
+      </form>
+    </div>
+  </div>
+</body>
+
+<!-- Footer Section -->
+<footer class="amazon-footer">
+    <div class="footer-top">
+        <a href="#top" class="back-to-top-link">Back to top</a>
+    </div>
+
+    <div class="footer-columns">
+    <div class="footer-column">
+        <h4>Get to Know Us</h4>
+        <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Press Releases</a></li>
+        <li><a href="#">Amazon Cares</a></li>
+        <li><a href="#">Gift a Smile</a></li>
+        </ul>
+    </div>
+
+    <div class="footer-column">
+        <h4>Connect with Us</h4>
+        <ul>
+        <li><a href="#">Facebook</a></li>
+        <li><a href="#">Twitter</a></li>
+        <li><a href="#">Instagram</a></li>
+        </ul>
+    </div>
+
+    <div class="footer-column">
+        <h4>Make Money with Us</h4>
+        <ul>
+        <li><a href="#">Sell on Amazon</a></li>
+        <li><a href="#">Sell under Amazon Accelerator</a></li>
+        <li><a href="#">Amazon Global Selling</a></li>
+        <li><a href="#">Become an Affiliate</a></li>
+        </ul>
+    </div>
+
+    <div class="footer-column">
+        <h4>Let Us Help You</h4>
+        <ul>
+        <li><a href="../user-account.html">Your Account</a></li>
+        <li><a href="#">Returns Centre</a></li>
+        <li><a href="#">100% Purchase Protection</a></li>
+        <li><a href="#">Amazon App Download</a></li>
+        <li><a href="#">Amazon Assistant Download</a></li>
+        </ul>
+    </div>
+    </div>
+
+    <div class="footer-bottom">
+    <div class="footer-logo">
+        <a href="../amazon.html">
+            <img src="../../images/amazon-logo-white.png" alt="Amazon Logo">
+        </a>
+    </div>
+    <p>&copy; 2024, Virtual Amazon Project. All rights reserved.</p>
+    </div>
+</footer>
+
+<script type="module" src="../scripts/account-settings/account.js"></script>
+</html>
