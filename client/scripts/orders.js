@@ -1,10 +1,9 @@
 import { addToCart, calculateCartQuantity } from "../data/cart.js";
-import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import formatCurrency from './utils/money.js';
 import { userAccountButton } from "./amazon.js";
-
-//console.log(document.cookie);
-
+import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
+// import utc from 'https://unpkg.com/dayjs@1.11.10/esm/plugin/utc.js';
+// dayjs.extend(utc);
 
 // Helper function to get user_id from cookies
 export function getUserIdFromCookies() {
@@ -51,7 +50,10 @@ async function loadPage() {
         continue; // Skip invalid orders
       }
 
-      const orderTimeString = dayjs(orderDetails.order_created_at).format('MMMM D');
+      //trừ đi 7 tiếng. (GMT+7. thời gian gốc là GMT)
+      //const orderTimeString = dayjs(orderDetails.order_created_at).format('MMMM D');
+      const orderTimeString = dayjs(orderDetails.order_created_at).subtract(7, 'hour').format('MMMM D');
+      
       ordersHTML += `
         <div class="order-container">
           <div class="order-header">

@@ -62,7 +62,8 @@ function renderOrderList(orderArray) {
     // Convert to GMT+7
     const date = new Date(order.order_created_at);
     const gmt7Offset = 17 * 60 * 60 * 1000; // tham chiếu thời gian lệch phải cộng 17 tiếng thay vì 7 tiếng. Có vẻ giờ gốc là GMT-10.
-    const localDate = new Date(date.getTime() + gmt7Offset);
+    const gmt7OneDayOff = 24 * 60 * 60 * 1000 // không rõ tại sao nhưng thời gian tất cả bị lệch cmn 1 ngày => trừ đi 7 tiếng, thay vì cộng 17 tiếng!
+    const localDate = new Date(date.getTime() + gmt7Offset - gmt7OneDayOff);
 
     // Format date as "Month Day, Year, HH:MM AM/PM"
     const formattedDate = localDate.toLocaleDateString("en-US", {

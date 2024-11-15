@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"server/database"
-	"fmt"
+	//"fmt"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -19,7 +19,7 @@ func UpdatePassword(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//xem data ok chưa ?
-	fmt.Println("Decoded data:", data) 
+	//fmt.Println("Decoded data:", data) 
 
 	// Lấy dữ liệu từ payload
 	newPassword, ok1 := data["newPassword"].(string)
