@@ -9,13 +9,14 @@ import (
 	_ "github.com/lib/pq"
 
 	//internal:
+	"server/API/accountHandler"
 	"server/API/adminHandler"
-	//"server/API/accountHandler"
 	"server/API/orderHandler"
 	"server/API/productHandler"
 	"server/API/userHandler"
 	"server/controllers"
 	"server/database"
+	//"server/middleware"
 
 	//"server/middleware"
 	"github.com/rs/cors"
@@ -92,7 +93,9 @@ func handleRequests() {
 	//order cần viết 1 api post ở dưới đây. Cho phép khi ng dùng xoá order hoặc admin xoá order thì nó sẽ xoá luôn order trong db
 
 	//API để chỉnh sửa thông tin cá nhân của người dùng:
-	//myRouter.HandleFunc("/api/user-settings/change-name", accountHandler.ChangeUserName).Methods("PUT");
+	myRouter.HandleFunc("/api/update-username", accountHandler.UpdateUsername).Methods("PUT")
+	myRouter.HandleFunc("/api/update-location", accountHandler.UpdateLocation).Methods("PUT")
+	myRouter.HandleFunc("/api/update-password", accountHandler.UpdatePassword).Methods("PUT")
 
 
 	//middleware code which allows connections to database from outer source (?)
@@ -107,7 +110,7 @@ func handleRequests() {
 		//maybe only 'GET' ?
 		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE"},//{"GET"} only  
 		
-		AllowedHeaders: []string{"Authorization", "Content-Type"},
+		AllowedHeaders: []string{"Content-Type"}, //remove "Authorization" header
 	})
 
 	// Apply CORS to the router

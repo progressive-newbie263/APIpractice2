@@ -98,7 +98,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	// Set cookie
 	http.SetCookie(w, &http.Cookie{
-		Name:     "jwt",
+		Name:     "token",
 		Value:    token,
 		Expires:  time.Now().Add(time.Hour * 24), // 1 day
 		HttpOnly: true,
@@ -121,11 +121,12 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		"message": "Login successfully",
 		"user": user,
 		"redirect_url": redirectURL,
+		"token":        token,
 	})
 }
 
 func User(w http.ResponseWriter, r *http.Request) {
-	cookie, err := r.Cookie("jwt")
+	cookie, err := r.Cookie("token")
 	if err != nil {
 		http.Error(w, "Could not login", http.StatusUnauthorized)
 		return
@@ -168,13 +169,19 @@ func User(w http.ResponseWriter, r *http.Request) {
 }
 
 func Logout(w http.ResponseWriter, r *http.Request) {
+	// Xóa cookie jwt bằng cách đặt giá trị trống và thời gian hết hạn trong quá khứ
 	http.SetCookie(w, &http.Cookie{
-		Name:    "jwt",
-		Value:   "",
-		Expires: time.Now().Add(-time.Hour), // Expired cookie
-		HttpOnly: true,
+		Name:     "token", // Tên cookie
+		Value:    "",    // Xóa giá trị cookie
+		Expires:  time.Now().Add(-time.Hour), // Đặt thời gian hết hạn về một giờ trước
+		HttpOnly: true,  // Đảm bảo cookie không thể truy cập qua JavaScript
+		Secure:   false, // Nếu sử dụng HTTPS, đặt là true
+		Path:     "/",   // Đảm bảo cookie áp dụng cho toàn bộ site
 	})
 
+	// Đặt header cho nội dung trả về là JSON
 	w.Header().Set("Content-Type", "application/json")
+
+	// Trả về thông báo JSON khi logout thành công
 	json.NewEncoder(w).Encode(map[string]string{"message": "Logged out"})
 }

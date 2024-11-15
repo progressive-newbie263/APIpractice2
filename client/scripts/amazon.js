@@ -227,6 +227,10 @@ export function userAccountButton () {
     authLink.addEventListener('click', function () {
       //set cookie date in the past to effectively delete cookie
       document.cookie = "user=; expires=Fri, 18 Oct 2024 00:00:00 UTC; path=/;";
+
+      // Delete token cookie by setting it to a past date
+      document.cookie = "token=; expires=Fri, 18 Oct 2024 00:00:00 UTC; path=/;";
+      
       // Optionally, you can call the logout API as well
       fetch('http://localhost:8082/api/logout', {
         method: 'POST',

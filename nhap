@@ -1,77 +1,66 @@
-// JavaScript to handle the edit button clicks and show the popup form with dynamic labels
+package accountHandler
 
-document.querySelectorAll('.edit-btn').forEach((button) => {
-  button.addEventListener('click', () => {
-    const fieldType = button.closest('.field').querySelector('label').getAttribute('for');
+import (
+	"encoding/json"
+	"net/http"
+	"server/database"
+	"golang.org/x/crypto/bcrypt"
+)
 
-    // Set the popup label based on the field type
-    let label;
-    switch (fieldType) {
-      case 'password':
-        label = 'New Password';
-        break;
-      case 'name':
-        label = 'New Name';
-        break;
-      case 'location':
-        label = 'New Location';
-        break;
-      default:
-        label = 'New Value';
-    }
+// đổi tên người dùng dựa trên userID và các trường khác từ payload
+func UpdatePassword(w http.ResponseWriter, r *http.Request) {
+	var data map[string]interface{}
 
-    // Create the popup HTML with dynamic label
-    const popupHTML = `
-      <div class="popup">
-        <div class="popup-content">
-          <h2>Update ${fieldType.charAt(0).toUpperCase() + fieldType.slice(1)}</h2>
-          <form id="updateForm">
-            <label for="currentPassword">Current Password:</label>
-            <input type="password" id="currentPassword" name="currentPassword" required>
-            
-            <label for="newValue">${label}:</label>
-            <input type="${fieldType === 'password' ? 'password' : 'text'}" id="newValue" name="newValue" required>
-            
-            <label for="confirmNewValue">Confirm ${label}:</label>
-            <input type="${fieldType === 'password' ? 'password' : 'text'}" id="confirmNewValue" name="confirmNewValue" required>
+	// Decode the JSON data from the request
+	if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
+		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+		return
+	}
 
-            <button type="submit">Update</button>
-            <button type="button" id="cancelButton">Cancel</button>
-          </form>
-        </div>
-      </div>
-    `;
+	//data từ payload
+	newPassword, ok1 := data["newPassword"].(string)
+	currentPassword, ok2 := data["currentPassword"].(string)
+	userID, ok3 := data["userID"].(float64) // user ID là integer trong bảng users. COnvert nó sang.
 
-    // Append popup to the body
-    document.body.insertAdjacentHTML('beforeend', popupHTML);
+	if !ok1 || !ok2 || !ok3 {
+		http.Error(w, "Missing or invalid required fields", http.StatusBadRequest)
+		return
+	}
 
-    // Handle form submission
-    document.getElementById('updateForm').addEventListener('submit', (e) => {
-      e.preventDefault();
+	// Convert userID to an integer
+	userIDInt := int(userID)
 
-      const currentPassword = document.getElementById('currentPassword').value;
-      const newValue = document.getElementById('newValue').value;
-      const confirmNewValue = document.getElementById('confirmNewValue').value;
+	// Check if the newUsername or currentPassword is empty
+	if newPassword == "" || currentPassword == "" {
+		http.Error(w, "Missing required fields", http.StatusBadRequest)
+		return
+	}
 
-      if (newValue !== confirmNewValue) {
-        alert("New value and confirmation do not match.");
-        return;
-      }
+	// Check if the user exists and retrieve their hashed password
+	var hashedPassword string
+	err := database.DB.QueryRow(`SELECT password FROM users WHERE id = $1`, userIDInt).Scan(&hashedPassword)
+	if err != nil {
+		http.Error(w, "User not found or unable to retrieve password", http.StatusUnauthorized)
+		return
+	}
 
-      // Placeholder check for current password (implement real check here)
-      if (currentPassword === 'your_actual_password') {
-        alert(`${fieldType.charAt(0).toUpperCase() + fieldType.slice(1)} updated successfully!`);
-        document.querySelector(`#user-${fieldType}`).innerText = newValue;
-        document.querySelector('.popup').remove();
-      } else {
-        alert("Current password is incorrect.");
-      }
-    });
+	// Verify the current password
+	err = bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(currentPassword))
+	if err != nil {
+		http.Error(w, "Invalid current password", http.StatusUnauthorized)
+		return
+	}
 
-    // Handle cancel button
-    document.getElementById('cancelButton').addEventListener('click', () => {
-      document.querySelector('.popup').remove();
-    });
-  });
-});
-,
+	// Update the username in the database
+	_, err = database.DB.Exec(`UPDATE users SET password = $1 WHERE id = $2`, newPassword, userIDInt)
+	if err != nil {
+		http.Error(w, "Failed to update password", http.StatusInternalServerError)
+		return
+	}
+
+	// Send success response
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]string{"message": "Password updated successfully"})
+}
+
+
