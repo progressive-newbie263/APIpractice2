@@ -43,20 +43,20 @@ function renderUserList(userArray) {
   const endIdx = startIdx + ordersPerPage;
   const paginatedUsers = userArray.slice(startIdx, endIdx);
 
-  // Render the users for the current page
+  //bỏ phần: <td>${user.password}</td>
+  //không cần thiết hiển thị nó ra page quản lý user.
   paginatedUsers.forEach((user) => {
     const row = document.createElement("tr");
 
     row.innerHTML = `
       <td>${user.id}</td>
       <td>${user.email}</td>
-      <td>${user.password}</td>
       <td>${user.name}</td>
-      <td>
-        <button class="edit-btn" onclick="editUser('${user.id}')">
+      <td style="text-align:center">
+        <button class="edit-btn-user" onclick="editUser('${user.id}')">
           Edit
         </button>
-        <button class="delete-btn" onclick="deleteUser('${user.id}')">
+        <button class="delete-btn-user" onclick="deleteUser('${user.id}')">
           Delete
         </button>
       </td>

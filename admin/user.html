@@ -74,7 +74,7 @@
       </ul>
     </div>
 
-    <div class="content" style="margin-top: -40px; margin-left: -80px; width: 1800px;">
+    <div class="content" style="margin-top: 0px; margin-left: -80px; width: 1800px;">
       <!-- Main Content -->
       <div class="container sized-container">
         <!-- User Form Section -->
@@ -95,9 +95,9 @@
                 <tr>
                   <th>ID</th>
                   <th>Email</th>
-                  <th>Password</th>
-                  <th>Name</th>
-                  <th>Actions</th>
+                  <!-- <th>Password</th> -->
+                  <th>User's Name</th>
+                  <th style="text-align: center;">Actions</th>
                 </tr>
               </thead>
               <tbody id="userTable">
@@ -121,10 +121,11 @@
               <input type="email" id="userEmail" name="email">
             </div>
 
-            <div class="form-group">
+            <!--Bỏ phần hiển thị password đi-->
+            <!-- <div class="form-group">
               <label for="userPassword">Password:</label>
               <input type="password" id="userPassword" name="password">
-            </div>
+            </div> -->
 
             <div class="form-group">
               <label for="firstName">Name:</label>
@@ -134,7 +135,7 @@
             <br>
 
             <div class="form-group">
-              <input type="submit" value="Add User">
+              <input style="margin-left: -44%;" type="submit" value="Add User">
             </div>
           </form>
         </div>
@@ -142,7 +143,7 @@
     </div>
   </div>
 
-  <footer>
+  <footer style="width: 103%;">
     <p>&copy; JackFrost's Admin Page</p>
   </footer>
 

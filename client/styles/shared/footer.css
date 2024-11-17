@@ -66,3 +66,12 @@
   height: 30px;
   margin-bottom: 10px;
 }
+
+.tos-link {
+  text-decoration: none;
+  color: rgb(194, 165, 112);
+}
+
+.tos-link:hover {
+  text-decoration: underline;
+}

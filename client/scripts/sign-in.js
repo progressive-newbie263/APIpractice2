@@ -1,3 +1,22 @@
+// Hàm xóa tất cả cookie
+//đề phòng trường hợp có 1 chỗ nào đó, mình quên xoá cookie. đảm bảo application trống trơn hết.
+function clearAllCookies() {
+  const cookies = document.cookie.split(";");
+
+  // Duyệt qua từng cookie và xóa
+  for (const cookie of cookies) {
+    const eqPos = cookie.indexOf("=");
+    const name = eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie.trim();
+    document.cookie = `${name}=; path=/; expires=Thu, 26 Jan 2004 00:00:00 UTC; SameSite=Lax; Secure=false`;
+  }
+}
+// Xóa tất cả cookie ngay khi trang được tải (on window loaded.)
+document.addEventListener("DOMContentLoaded", () => {
+  clearAllCookies();
+});
+
+
+
 // Hàm đăng nhập và lưu token vào cookie
 async function LoginWithCookie() {
   const email = document.getElementById("email").value;

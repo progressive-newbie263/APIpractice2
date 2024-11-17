@@ -92,7 +92,10 @@ img {
   border-radius: 5px;
 }
 
-.edit-btn, .delete-btn {
+.edit-btn, 
+.delete-btn,
+.edit-btn-user,
+.delete-btn-user {
   width: 70px;
   padding: 8px 16px;
   color: white;
@@ -103,20 +106,29 @@ img {
   transition: background-color 0.3s ease;
 }
 
-.edit-btn {
+.edit-btn-user,
+.delete-btn-user {
+  align-items: center;
+}
+
+.edit-btn, 
+.edit-btn-user {
   margin-bottom: 10px;
   background-color:  #20DE60;
 }
 
-.delete-btn {
+.delete-btn, 
+.delete-btn-user {
   background-color: #d9534f;
 }
 
-.edit-btn:hover {
+.edit-btn:hover,
+.edit-btn-user:hover {
   background-color: #27a61e;
 }
 
-.delete-btn:hover {
+.delete-btn:hover,
+.delete-btn-user:hover {
   background-color: #c9302c;
 }
 
