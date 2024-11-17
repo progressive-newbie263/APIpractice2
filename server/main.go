@@ -85,12 +85,23 @@ func handleRequests() {
 	// myRouter.HandleFunc("/api/cart", cartHandler.GetCartFromDatabase).Methods("GET") 
 
 	//orderAPI
-	//create order will create and fill in database both order_user and orders.
+	//all-orders sẽ thuộc về phân trang admin.
 	myRouter.HandleFunc("/api/orders", orderHandler.CreateOrder).Methods("POST") //post cart ==> order. 
-	myRouter.HandleFunc("/api/all-orders", orderHandler.GetAllOrders).Methods("GET") //lấy all orders in db
-	myRouter.HandleFunc("/api/order-details", orderHandler.GetOrderDetails).Methods("GET") // test; thêm ?order_id={orderId} vào: http://localhost:8082/api/order-details?order_id=Ig1cWE2tOMXzpC9mvfxo
-	myRouter.HandleFunc("/api/order-history", orderHandler.GetOrdersByUserID).Methods("GET") //api này dùng để truy ra toàn bộ lịch sử order của 1 user.
-	//order cần viết 1 api post ở dưới đây. Cho phép khi ng dùng xoá order hoặc admin xoá order thì nó sẽ xoá luôn order trong db
+
+	//lịch sử đơn hàng (phía admin). API này trả về mọi đơn hàng ở mọi trạng thái.
+	// endpoint này trả về đơn hàng pending. http://localhost:8082/api/all-orders?order_status=Pending
+	// endpoint này trả về đơn hàng đã xong. http://localhost:8082/api/all-orders?order_status=Delivered.
+	myRouter.HandleFunc("/api/all-orders", orderHandler.GetAllOrdersByStatus).Methods("GET") //lấy all orders in db
+
+
+	//lịch sử đơn hàng, phía người xem.
+	// test; thêm ?order_id={orderId} vào: http://localhost:8082/api/order-details?order_id=Ig1cWE2tOMXzpC9mvfxo
+	myRouter.HandleFunc("/api/order-details", orderHandler.GetOrderDetails).Methods("GET") 
+	
+	//api này dùng để truy ra toàn bộ lịch sử order của 1 user. (phân trang: client.)
+	//chạy: http://localhost:8082/api/order-history?user_id=3&order_status=Pending (lưu ý, Pending và Delivered viết hoa do trong db nó thế.)
+	myRouter.HandleFunc("/api/order-history", orderHandler.GetOrdersByUserIDAndStatus).Methods("GET") //api này là tổng hợp 3 cái dưới. Nhưng fail
+
 
 	//API để chỉnh sửa thông tin cá nhân của người dùng:
 	myRouter.HandleFunc("/api/update-username", accountHandler.UpdateUsername).Methods("PUT")
@@ -127,3 +138,12 @@ func main() {
 
   handleRequests()
 }
+
+
+/* một số API được rút gọn: */
+// myRouter.HandleFunc("/api/order-history", orderHandler.GetOrdersByUserID).Methods("GET") //toàn bộ
+// myRouter.HandleFunc("/api/order-history-pending", orderHandler.GetPendingOrdersByUserID).Methods("GET") //đang xử lý
+// myRouter.HandleFunc("/api/order-history-delivered", orderHandler.GetDeliveredOrdersByUserID).Methods("GET") //đã xong
+
+//myRouter.HandleFunc("/api/all-orders/pending", orderHandler.GetAllPendingOrders).Methods("GET") //lấy orders chưa xong
+// myRouter.HandleFunc("/api/all-orders/delivered", orderHandler.GetAllDeliveredOrders).Methods("GET") //lấy order đã xong.

@@ -236,3 +236,35 @@
 .delete-order-button:hover {
   background-color: rgb(228, 25, 25);
 }
+
+.order-tabs {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Add a new class for the active tab */
+.tab-button.active {
+  background-color: #f1800f; /* Change to your preferred color */
+  color: #fff;
+  font-weight: bold; /* Optional */
+}
+
+.tab-button {
+  margin-left: 28%;
+  margin-right: -28%;
+  font-size: 16px;
+  align-items: center;
+  justify-content: space-around;
+  width: 160px;
+  padding: 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  opacity: 0.85;
+  transition: background-color 0.15s ease;
+}
+
+/* Optional: Hover effect for the tabs */
+.tab-button:hover {
+  opacity: 1;
+}
+

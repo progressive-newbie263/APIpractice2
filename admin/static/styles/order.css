@@ -85,3 +85,67 @@
 .orders-table button:hover {
   background-color: rgb(61, 118, 224);
 }
+
+
+
+/*
+  styling cho các nút chuyển trạng thái danh sách order.
+*/
+/* Add a container for the filter buttons */
+.order-filter {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px; /* Space between buttons and table */
+}
+
+/* Styling individual buttons */
+.order-filter button {
+  background-color: #4CAF50; /* Green for default button color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  margin: 0 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover effect for buttons */
+.order-filter button:hover {
+  background-color: #45a049;
+  transform: translateY(-2px); /* Slight lift effect */
+}
+
+/* Active state (when clicked) for better feedback */
+.order-filter button.active {
+  background-color: #3e8e41;
+  transform: translateY(0); /* Return to normal after click */
+}
+
+/* Styles for specific button categories */
+.order-filter #allOrdersBtn {
+  background-color: #007bff; /* Blue for All */
+}
+
+.order-filter #pendingOrdersBtn {
+  background-color: #df9008; /* Orange for Pending */
+}
+
+.order-filter #deliveredOrdersBtn {
+  background-color: #28a745; /* Green for Delivered */
+}
+
+/* Hover effects for specific buttons */
+.order-filter #allOrdersBtn:hover {
+  background-color: #0069d9;
+}
+
+.order-filter #pendingOrdersBtn:hover {
+  background-color: #e64900;
+}
+
+.order-filter #deliveredOrdersBtn:hover {
+  background-color: #218838;
+}

@@ -1,66 +1,110 @@
-package accountHandler
+// Constants for pagination
+let currentPage = 1; // Track the current page
+const ordersPerPage = 5; // Display 5 orders per page
 
-import (
-	"encoding/json"
-	"net/http"
-	"server/database"
-	"golang.org/x/crypto/bcrypt"
-)
+// Reusable render pagination controls function
+function renderPaginationControls(itemArray, displayFunction) {
+  const paginationContainer = document.getElementById("paginationControls");
+  const prevButton = document.getElementById("prevPage");
+  const nextButton = document.getElementById("nextPage");
+  const pageInfo = document.getElementById("pageInfo");
 
-// đổi tên người dùng dựa trên userID và các trường khác từ payload
-func UpdatePassword(w http.ResponseWriter, r *http.Request) {
-	var data map[string]interface{}
+  const totalPages = Math.ceil(itemArray.length / ordersPerPage);
 
-	// Decode the JSON data from the request
-	if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
-		http.Error(w, "Invalid request payload", http.StatusBadRequest)
-		return
-	}
+  // Update page info
+  pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
 
-	//data từ payload
-	newPassword, ok1 := data["newPassword"].(string)
-	currentPassword, ok2 := data["currentPassword"].(string)
-	userID, ok3 := data["userID"].(float64) // user ID là integer trong bảng users. COnvert nó sang.
+  // Set up Previous button
+  prevButton.disabled = currentPage === 1;
+  prevButton.onclick = () => {
+    if (currentPage > 1) {
+      currentPage--;
+      displayFunction(itemArray);
+    }
+  };
 
-	if !ok1 || !ok2 || !ok3 {
-		http.Error(w, "Missing or invalid required fields", http.StatusBadRequest)
-		return
-	}
-
-	// Convert userID to an integer
-	userIDInt := int(userID)
-
-	// Check if the newUsername or currentPassword is empty
-	if newPassword == "" || currentPassword == "" {
-		http.Error(w, "Missing required fields", http.StatusBadRequest)
-		return
-	}
-
-	// Check if the user exists and retrieve their hashed password
-	var hashedPassword string
-	err := database.DB.QueryRow(`SELECT password FROM users WHERE id = $1`, userIDInt).Scan(&hashedPassword)
-	if err != nil {
-		http.Error(w, "User not found or unable to retrieve password", http.StatusUnauthorized)
-		return
-	}
-
-	// Verify the current password
-	err = bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(currentPassword))
-	if err != nil {
-		http.Error(w, "Invalid current password", http.StatusUnauthorized)
-		return
-	}
-
-	// Update the username in the database
-	_, err = database.DB.Exec(`UPDATE users SET password = $1 WHERE id = $2`, newPassword, userIDInt)
-	if err != nil {
-		http.Error(w, "Failed to update password", http.StatusInternalServerError)
-		return
-	}
-
-	// Send success response
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(map[string]string{"message": "Password updated successfully"})
+  // Set up Next button
+  nextButton.disabled = currentPage === totalPages;
+  nextButton.onclick = () => {
+    if (currentPage < totalPages) {
+      currentPage++;
+      displayFunction(itemArray);
+    }
+  };
 }
+
+
+// Function to fetch and display orders with pagination
+async function showOrders() {
+  try {
+    const response = await fetch("http://localhost:8082/api/all-orders");
+    const orders = await response.json();
+    renderOrderList(orders); // Initial render of orders with pagination
+    renderPaginationControls(orders, renderOrderList); // Set up pagination controls
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+  }
+}
+
+// Render orders list with pagination
+function renderOrderList(orderArray) {
+  const ordersTableBody = document.querySelector("#ordersTable tbody");
+  ordersTableBody.innerHTML = ""; // Clear any previous data
+
+  // Pagination logic
+  const startIndex = (currentPage - 1) * ordersPerPage;
+  const endIndex = startIndex + ordersPerPage;
+  const ordersToDisplay = orderArray.slice(startIndex, endIndex);
+
+  ordersToDisplay.forEach(order => {
+    const row = document.createElement("tr");
+
+    // Convert to GMT+7
+    const date = new Date(order.order_created_at);
+    const gmt7Offset = 17 * 60 * 60 * 1000; // tham chiếu thời gian lệch phải cộng 17 tiếng thay vì 7 tiếng. Có vẻ giờ gốc là GMT-10.
+    const gmt7OneDayOff = 24 * 60 * 60 * 1000 // không rõ tại sao nhưng thời gian tất cả bị lệch cmn 1 ngày => trừ đi 7 tiếng, thay vì cộng 17 tiếng!
+    const localDate = new Date(date.getTime() + gmt7Offset - gmt7OneDayOff);
+
+    // Format date as "Month Day, Year, HH:MM AM/PM"
+    const formattedDate = localDate.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true
+    });
+
+    row.innerHTML = `
+      <td>${order.order_id}</td>
+      <td>${order.user_id}</td>
+      <td>$${(order.order_cost_cents / 100).toFixed(2)}</td>
+      <td>${formattedDate}</td>
+      <td style="text-align: center;"><button onclick="viewOrderDetails('${order.order_id}')">View</button></td>
+    `;
+    ordersTableBody.appendChild(row);
+  });
+
+  // Call pagination controls
+  renderPaginationControls(orderArray, renderOrderList);
+}
+
+// Function to handle the "View Details" button click
+function viewOrderDetails(orderID) {
+  //Redirect to order details page
+  window.location.href = `/admin/orders`;
+}
+
+// Initialize showOrders when the page loads
+document.addEventListener("DOMContentLoaded", showOrders);
+
+
+
+
+
+
+
+
+
 
 

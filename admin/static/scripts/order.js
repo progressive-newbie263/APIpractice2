@@ -1,6 +1,5 @@
-// Constants for pagination
-let currentPage = 1; // Track the current page
-const ordersPerPage = 5; // Display 5 orders per page
+let currentPage = 1;
+const ordersPerPage = 5; // 5 orders per page.
 
 // Reusable render pagination controls function
 function renderPaginationControls(itemArray, displayFunction) {
@@ -33,11 +32,17 @@ function renderPaginationControls(itemArray, displayFunction) {
   };
 }
 
-
-// Function to fetch and display orders with pagination
-async function showOrders() {
+// Function to fetch and display orders based on status
+async function filterOrders(status) {
   try {
-    const response = await fetch("http://localhost:8082/api/all-orders");
+    let url = "http://localhost:8082/api/all-orders";
+    
+    // If status is provided (Pending or Delivered), filter orders
+    if (status !== '') {
+      url += `?order_status=${status}`;
+    }
+    
+    const response = await fetch(url);
     const orders = await response.json();
     renderOrderList(orders); // Initial render of orders with pagination
     renderPaginationControls(orders, renderOrderList); // Set up pagination controls
@@ -46,7 +51,7 @@ async function showOrders() {
   }
 }
 
-// Render orders list with pagination
+
 function renderOrderList(orderArray) {
   const ordersTableBody = document.querySelector("#ordersTable tbody");
   ordersTableBody.innerHTML = ""; // Clear any previous data
@@ -61,8 +66,8 @@ function renderOrderList(orderArray) {
 
     // Convert to GMT+7
     const date = new Date(order.order_created_at);
-    const gmt7Offset = 17 * 60 * 60 * 1000; // tham chiếu thời gian lệch phải cộng 17 tiếng thay vì 7 tiếng. Có vẻ giờ gốc là GMT-10.
-    const gmt7OneDayOff = 24 * 60 * 60 * 1000 // không rõ tại sao nhưng thời gian tất cả bị lệch cmn 1 ngày => trừ đi 7 tiếng, thay vì cộng 17 tiếng!
+    const gmt7Offset = 17 * 60 * 60 * 1000; // Time offset for GMT+7
+    const gmt7OneDayOff = 24 * 60 * 60 * 1000; // Adjust for day mismatch
     const localDate = new Date(date.getTime() + gmt7Offset - gmt7OneDayOff);
 
     // Format date as "Month Day, Year, HH:MM AM/PM"
@@ -75,13 +80,52 @@ function renderOrderList(orderArray) {
       hour12: true
     });
 
+    // Create status column with image and color-coding
+    const statusCell = document.createElement("td");
+
+    // Create a container for both the text and icon
+    const statusContainer = document.createElement("div");
+    statusContainer.style.display = "flex";
+    statusContainer.style.alignItems = "center"; // Vertically align the content
+    statusContainer.style.gap = "8px"; // Add some space between text and icon
+
+    const statusText = document.createElement("span");
+    statusText.style.fontWeight = "bold"; // Optional: Make text bold
+    statusText.style.fontSize = "14px"; // Optional: Adjust font size
+
+    // Create and style the image (checkmark icon)
+    const statusImg = document.createElement("img");
+    statusImg.style.width = "25px";  // Adjust size as needed
+    statusImg.style.height = "25px"; // Adjust size as needed
+
+    if (order.order_status === "Delivered") {
+      statusImg.src = "images/waiting-status/checked.svg"; // Assuming you have a checkmark image
+      statusText.textContent = "Delivered";
+      statusCell.style.backgroundColor = "green";
+      statusText.style.color = "white"; // Optional: Make text color white for better contrast
+    } else if (order.order_status === "Pending") {
+      statusImg.src = "images/waiting-status/pending.png"; // Your pending icon
+      statusText.textContent = "Pending";
+      statusCell.style.backgroundColor = "#FF9800";
+      statusText.style.color = "white"; // Optional: Make text color white for better contrast
+    }
+
+    // Append the icon and text to the container
+    statusContainer.appendChild(statusText);
+    statusContainer.appendChild(statusImg);
+    statusCell.appendChild(statusContainer); // Append the container to the status cell
+
+    // Add data to the table row
     row.innerHTML = `
       <td>${order.order_id}</td>
       <td>${order.user_id}</td>
       <td>$${(order.order_cost_cents / 100).toFixed(2)}</td>
       <td>${formattedDate}</td>
-      <td style="text-align: center;"><button onclick="viewOrderDetails('${order.order_id}')">View</button></td>
     `;
+
+    row.appendChild(statusCell); // Append the status cell
+    row.innerHTML += `<td style="text-align: center;"><button onclick="viewOrderDetails('${order.order_id}')">View</button></td>`;
+
     ordersTableBody.appendChild(row);
   });
 
@@ -89,18 +133,12 @@ function renderOrderList(orderArray) {
   renderPaginationControls(orderArray, renderOrderList);
 }
 
+
 // Function to handle the "View Details" button click
 function viewOrderDetails(orderID) {
-  //Redirect to order details page
-  window.location.href = `/admin/orders`;
+  // Redirect to order details page
+  window.location.href = `/admin/orders/${orderID}`;
 }
 
-// Initialize showOrders when the page loads
-document.addEventListener("DOMContentLoaded", showOrders);
-
-
-
-
-
-
-
+// Initialize the 'All' orders when the page loads
+document.addEventListener("DOMContentLoaded", () => filterOrders('all'));

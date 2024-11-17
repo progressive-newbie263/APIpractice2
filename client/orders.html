@@ -72,10 +72,27 @@
       </div>
     </div>
 
-    <div class="main">
+    <!--phần lịch sử order gốc (show cả pending và done)-->
+    <!-- <div class="main">
       <div class="page-title">Your Orders</div>
 
       <div class="orders-grid js-orders-grid"></div>
+    </div> -->
+
+
+    <!--lịch sử order mới-->
+    <div class="main">
+      <div class="page-title">Your Orders</div>
+    
+      <!-- Tabs Navigation -->
+      <div class="tabs">
+        <button class="tab-button js-pending-tab active">Pending Orders</button>
+        <button class="tab-button js-delivered-tab">Order History</button>
+      </div>
+    
+      <!-- Orders Container -->
+      <div id="pending-orders" class="orders-grid js-orders-grid active-orders"></div>
+      <div id="completed-orders" class="orders-grid js-orders-grid"></div>
     </div>
   </body>
 
