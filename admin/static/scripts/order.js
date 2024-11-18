@@ -41,9 +41,12 @@ async function filterOrders(status) {
     if (status !== '') {
       url += `?order_status=${status}`;
     }
-    
     const response = await fetch(url);
     const orders = await response.json();
+    
+    // Sắp xếp đơn hàng. Mới nhất ở trước.
+    orders.sort((a, b) => new Date(b.order_created_at) - new Date(a.order_created_at));
+    
     renderOrderList(orders); // Initial render of orders with pagination
     renderPaginationControls(orders, renderOrderList); // Set up pagination controls
   } catch (error) {
