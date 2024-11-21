@@ -6,7 +6,7 @@ import {
   loadProductsFetch,
   Product,
   Clothing,
-  Appliance,
+  //Appliance,
 } from "../data/products.js";
 
 
@@ -140,9 +140,11 @@ function searchForProductClick() {
           // Ensure the product is wrapped in the appropriate class
           if (productDetails.type === 'clothing') {
             return new Clothing(productDetails);
-          } else if (productDetails.type === 'appliance') {
-            return new Appliance(productDetails);
-          } else {
+          } 
+          // else if (productDetails.type === 'appliance') {
+          //   return new Appliance(productDetails);
+          // } 
+          else {
             return new Product(productDetails);
           }
         });
@@ -175,9 +177,11 @@ function searchForProductEnter() {
           // Ensure the product is wrapped in the appropriate class
           if (productDetails.type === 'clothing') {
             return new Clothing(productDetails);
-          } else if (productDetails.type === 'appliance') {
-            return new Appliance(productDetails);
-          } else {
+          } 
+          // else if (productDetails.type === 'appliance') {
+          //   return new Appliance(productDetails);
+          // } 
+          else {
             return new Product(productDetails);
           }
         });

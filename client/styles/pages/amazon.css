@@ -171,3 +171,72 @@ select {
   cursor: pointer;
   box-shadow: 0 2px 5px rgba(213, 217, 217, 0.5);
 }
+
+
+
+
+/* Styling cho các nút chọn size */
+.size-options {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.size-option-button {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: bold;
+  border: 1px solid rgb(213, 217, 217);
+  border-radius: 4px;
+  background-color: rgb(240, 240, 240);
+  color: rgb(33, 33, 33);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.size-option-button:hover {
+  background-color: rgb(220, 220, 220);
+  transform: translateY(-2px);
+}
+
+.size-option-button.selected {
+  background-color: rgb(33, 150, 243);
+  color: white;
+  border: none;
+}
+
+/* Styling cho các nút chọn màu */
+.color-options {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.color-option-button {
+  margin-top: 5px;
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid rgb(213, 217, 217);
+  color: white;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  outline: none;
+}
+
+.color-option-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.color-option-button.selected {
+  border: 2px solid rgb(33, 150, 243);
+  box-shadow: 0 0 10px rgba(33, 150, 243, 0.5);
+}
+
+/* Dành cho các màu sáng, thêm màu chữ đen */
+.color-option-button.black-text {
+  color: black;
+}

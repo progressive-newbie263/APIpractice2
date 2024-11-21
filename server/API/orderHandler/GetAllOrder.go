@@ -15,6 +15,7 @@ type Order struct {
 	UserID            int       `json:"user_id"`            // user who made the order
 	OrderCostCents    int       `json:"order_cost_cents"`   // total cost of the order in cents
 	OrderCreatedAt    time.Time `json:"order_created_at"`   // timestamp for order creation
+	IsUpdated      		bool           `json:"is_updated"`
 	//bổ sung thêm order-status. 
 	//Nếu order đã xong (done) => chia nó ra 1 trang. 
 	//Còn nếu chưa xong(pending) nó sẽ ở 1 trang khác
@@ -37,10 +38,10 @@ func GetAllOrdersByStatus(w http.ResponseWriter, r *http.Request) {
 
 	// Query based on the status
 	if status == "all" {
-		rows, err = database.DB.Query("SELECT id, order_id, user_id, order_cost_cents, order_created_at, order_status FROM orders")
+		rows, err = database.DB.Query("SELECT id, order_id, user_id, order_cost_cents, order_created_at, order_status, is_updated FROM orders")
 	} else {
 		// Query orders with the specified status
-		rows, err = database.DB.Query("SELECT id, order_id, user_id, order_cost_cents, order_created_at, order_status FROM orders WHERE order_status = $1", status)
+		rows, err = database.DB.Query("SELECT id, order_id, user_id, order_cost_cents, order_created_at, order_status, is_updated FROM orders WHERE order_status = $1", status)
 	}
 
 	if err != nil {
@@ -62,6 +63,7 @@ func GetAllOrdersByStatus(w http.ResponseWriter, r *http.Request) {
 			&order.OrderCostCents,
 			&order.OrderCreatedAt,
 			&order.OrderStatus, // Ensure to scan the order_status field
+			&order.IsUpdated,
 		)
 		if err != nil {
 			http.Error(w, "Failed to scan order data", http.StatusInternalServerError)
@@ -83,75 +85,3 @@ func GetAllOrdersByStatus(w http.ResponseWriter, r *http.Request) {
 
 
 
-/*
-//function cho API lấy ra order chưa xong/pending
-func GetAllPendingOrders(w http.ResponseWriter, r *http.Request) {
-	rows, err := database.DB.Query(`
-		SELECT id, order_id, user_id, order_cost_cents, order_created_at, order_status 
-		FROM orders
-		WHERE order_status = 'Pending'
-	`)
-	if err != nil {
-		http.Error(w, "Failed to retrieve pending orders", http.StatusInternalServerError)
-		return
-	}
-	defer rows.Close()
-
-	var pendingOrders []Order
-	for rows.Next() {
-		var order Order
-		err := rows.Scan(
-			&order.ID,
-			&order.OrderID,
-			&order.UserID,
-			&order.OrderCostCents,
-			&order.OrderCreatedAt,
-			&order.OrderStatus,
-		)
-		if err != nil {
-			http.Error(w, "Failed to scan order data", http.StatusInternalServerError)
-			return
-		}
-		pendingOrders = append(pendingOrders, order)
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(pendingOrders)
-}
-
-
-//function tạo API trả về order đã hoàn thành.
-func GetAllDeliveredOrders(w http.ResponseWriter, r *http.Request) {
-	rows, err := database.DB.Query(`
-		SELECT id, order_id, user_id, order_cost_cents, order_created_at, order_status 
-		FROM orders
-		WHERE order_status = 'Delivered'
-	`)
-	if err != nil {
-		http.Error(w, "Failed to retrieve done orders", http.StatusInternalServerError)
-		return
-	}
-	defer rows.Close()
-
-	var doneOrders []Order
-	for rows.Next() {
-		var order Order
-		err := rows.Scan(
-			&order.ID,
-			&order.OrderID,
-			&order.UserID,
-			&order.OrderCostCents,
-			&order.OrderCreatedAt,
-			&order.OrderStatus,
-		)
-		if err != nil {
-			http.Error(w, "Failed to scan order data", http.StatusInternalServerError)
-			return
-		}
-		doneOrders = append(doneOrders, order)
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(doneOrders)
-}
-*/

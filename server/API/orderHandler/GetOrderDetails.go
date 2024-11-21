@@ -13,6 +13,7 @@ type OrderDetail struct {
 	UserID         int            `json:"user_id"`
 	OrderCostCents int            `json:"order_cost_cents"`
 	OrderCreatedAt time.Time      `json:"order_created_at"`
+	IsUpdated      bool           `json:"is_updated"`
 	Products       []ProductDetail `json:"products"`
 }
 
@@ -33,16 +34,17 @@ func GetOrderDetails(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Query to get order summary
+	// Query to get order summary including the is_updated column
 	var order OrderDetail
 	err := database.DB.QueryRow(`
-		SELECT o.order_id, o.user_id, o.order_cost_cents, o.order_created_at
+		SELECT o.order_id, o.user_id, o.order_cost_cents, o.order_created_at, o.is_updated
 		FROM orders o
 		WHERE o.order_id = $1`, orderID).Scan(
 		&order.OrderID,
 		&order.UserID,
 		&order.OrderCostCents,
 		&order.OrderCreatedAt,
+		&order.IsUpdated, // Scan the is_updated column into the IsUpdated field
 	)
 
 	if err != nil {
@@ -87,77 +89,4 @@ func GetOrderDetails(w http.ResponseWriter, r *http.Request) {
 }
 
 
-//tạm thời bỏ.
 
-// GetPendingOrders lọc ra các order pending của 1 người dùng.
-// func GetPendingOrdersDetails(w http.ResponseWriter, r *http.Request) {
-// 	userID := r.URL.Query().Get("user_id")
-// 	if userID == "" {
-// 		http.Error(w, "user_id is required", http.StatusBadRequest)
-// 		return
-// 	}
-
-// 	rows, err := database.DB.Query(`
-// 		SELECT o.order_id, o.user_id, o.order_cost_cents, o.order_created_at
-// 		FROM orders o
-// 		WHERE o.user_id = $1 AND o.status = 'pending'
-// 		ORDER BY o.order_created_at DESC`, userID)
-// 	if err != nil {
-// 		log.Printf("Failed to query pending orders for user ID %s: %v", userID, err)
-// 		http.Error(w, "Failed to retrieve pending orders: "+err.Error(), http.StatusInternalServerError)
-// 		return
-// 	}
-// 	defer rows.Close()
-
-// 	var orders []Order
-// 	for rows.Next() {
-// 		var order Order
-// 		if err := rows.Scan(&order.OrderID, &order.UserID, &order.OrderCostCents, &order.OrderCreatedAt); err != nil {
-// 			http.Error(w, "Failed to scan order data: "+err.Error(), http.StatusInternalServerError)
-// 			return
-// 		}
-// 		orders = append(orders, order)
-// 	}
-
-// 	w.Header().Set("Content-Type", "application/json")
-// 	if err := json.NewEncoder(w).Encode(orders); err != nil {
-// 		http.Error(w, "Failed to encode response: "+err.Error(), http.StatusInternalServerError)
-// 	}
-// }
-
-
-// // GetDeliveredOrdersDetails trả về các order đã giao xong của 1 người dùng.
-// func GetDeliveredOrdersDetails(w http.ResponseWriter, r *http.Request) {
-// 	userID := r.URL.Query().Get("user_id")
-// 	if userID == "" {
-// 		http.Error(w, "user_id is required", http.StatusBadRequest)
-// 		return
-// 	}
-
-// 	rows, err := database.DB.Query(`
-// 		SELECT o.order_id, o.user_id, o.order_cost_cents, o.order_created_at
-// 		FROM orders o
-// 		WHERE o.user_id = $1 AND o.status = 'delivered'
-// 		ORDER BY o.order_created_at DESC`, userID)
-// 	if err != nil {
-// 		log.Printf("Failed to query delivered orders for user ID %s: %v", userID, err)
-// 		http.Error(w, "Failed to retrieve delivered orders: "+err.Error(), http.StatusInternalServerError)
-// 		return
-// 	}
-// 	defer rows.Close()
-
-// 	var orders []Order
-// 	for rows.Next() {
-// 		var order Order
-// 		if err := rows.Scan(&order.OrderID, &order.UserID, &order.OrderCostCents, &order.OrderCreatedAt); err != nil {
-// 			http.Error(w, "Failed to scan order data: "+err.Error(), http.StatusInternalServerError)
-// 			return
-// 		}
-// 		orders = append(orders, order)
-// 	}
-
-// 	w.Header().Set("Content-Type", "application/json")
-// 	if err := json.NewEncoder(w).Encode(orders); err != nil {
-// 		http.Error(w, "Failed to encode response: "+err.Error(), http.StatusInternalServerError)
-// 	}
-// }

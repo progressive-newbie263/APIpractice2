@@ -55,9 +55,13 @@ function renderProductList(productArray) {
       <td>$${(product.pricecents / 100).toFixed(2)}</td>
       <td>${product.keywords}</td>
       <td>${product.type}</td>
+      
+      <!--
       <td>${product.sizechartlink.String ? product.sizechartlink.String : 'No info'}</td>
       <td>${product.instructionslink.String ? product.instructionslink.String : 'No info'}</td>
       <td>${product.warrantylink.String ? product.warrantylink.String : 'No info'}</td>
+      -->
+
       <td>
         <button class="edit-btn" data-id="${product.id}">
           Edit
@@ -169,9 +173,9 @@ function editProduct(productID) {
   document.getElementById("productKeywords").value = product.keywords;
   document.getElementById("productType").value = product.type;
   
-  document.getElementById("sizeChartLink").value = cleanValue(product.sizechartlink);
-  document.getElementById("instructionsLink").value = cleanValue(product.instructionslink);
-  document.getElementById("warrantyLink").value = cleanValue(product.warrantylink);
+  // document.getElementById("sizeChartLink").value = cleanValue(product.sizechartlink);
+  // document.getElementById("instructionsLink").value = cleanValue(product.instructionslink);
+  // document.getElementById("warrantyLink").value = cleanValue(product.warrantylink);
 
   // Change the form title and submit button text to indicate editing mode
   formTitle.innerHTML = "Edit Product";
@@ -196,9 +200,9 @@ document.getElementById("addProductForm").addEventListener("submit", async (even
     pricecents: parseInt(document.getElementById("productPrice").value),
     keywords: document.getElementById("productKeywords").value,
     type: document.getElementById("productType").value,
-    sizechartlink: document.getElementById("sizeChartLink").value || null,
-    instructionslink: document.getElementById("instructionsLink").value || null,
-    warrantylink: document.getElementById("warrantyLink").value || null,
+    // sizechartlink: document.getElementById("sizeChartLink").value || null,
+    // instructionslink: document.getElementById("instructionsLink").value || null,
+    // warrantylink: document.getElementById("warrantyLink").value || null,
   };
 
   const method = editingProduct ? "PUT" : "POST"; // If editing, use PUT; otherwise, POST

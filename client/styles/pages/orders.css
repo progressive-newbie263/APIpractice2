@@ -251,6 +251,7 @@
 }
 
 .tab-button {
+  position: relative; /* Không cần cố định tabs */
   margin-left: 28%;
   margin-right: -28%;
   font-size: 16px;
@@ -268,4 +269,52 @@
 .tab-button:hover {
   opacity: 1;
 }
+
+
+/* Style for locked orders */
+.locked {
+  opacity: 0.5;
+  pointer-events: none;
+  background-color: #f0f0f0; /* You can change this to any color */
+  cursor: not-allowed;
+}
+
+.locked .edit-order-button {
+  background-color: #c30707;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+}
+
+/* Nút Edit mặc định */
+.edit-order-button {
+  background-color: white; /* Màu nền trắng */
+  color: black; /* Màu chữ đen */
+  border: 1px solid black; /* Viền đen */
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 14px; /* Kích thước chữ */
+  cursor: pointer; /* Con trỏ chuột khi hover */
+  transition: all 0.3s ease; /* Hiệu ứng mượt mà khi thay đổi */
+}
+
+/* Hiệu ứng hover cho nút Edit */
+.edit-order-button:hover {
+  background-color: #f4f4f4; /* Màu nền xám nhạt khi hover */
+  color: #007bff; /* Màu chữ chuyển sang xanh dương */
+  border-color: #007bff; /* Viền chuyển sang xanh dương */
+}
+
+
+/* Thêm vào CSS của bạn */
+.edit-order-button.edited {
+  background-color: orange; /* Màu cam */
+  color: white; /* Màu chữ trắng */
+  border: 1px solid orange; /* Viền cam */
+}
+
+
+
+
 

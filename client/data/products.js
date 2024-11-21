@@ -30,7 +30,6 @@ export class Product {
     this.ratingcount = productDetails.ratingcount;
     this.pricecents = productDetails.pricecents;
     this.keywords = productDetails.keywords;
-    //this.type = productDetails.type;
   }
 
   getStarsUrl() {
@@ -46,59 +45,115 @@ export class Product {
   }
 }
 
-//INHERITANCE:
-//size chart:
+// INHERITANCE:
+// size chart:
 export class Clothing extends Product {
-  sizechartlink;
+  sizeOptions;
+  colorOptions;
+  selectedSize;
+  selectedColor;
 
   constructor(productDetails) {
-    super(productDetails); //call the constructor of its parent class
-    
-    //hiện tại ở database thì String là địa chỉ còn Valid là khi nó đúng.
-    //trả về địa chỉ kia, nếu tồn tại link image khả dụng. Nếu ko, trả lại empty string
-    this.sizechartlink = productDetails.sizechartlink.String ? `/${productDetails.sizechartlink.String}` : ''; 
+    super(productDetails); // Call the constructor of the parent class
+
+    //4 nút để lựa chọn cỡ.
+    this.sizeOptions = ['S', 'M', 'L', 'XL'];
+
+    // Chọn màu sắc.
+    const colorOptions = productDetails.variants.map(variant => variant.color);
+    this.colorOptions = Array.from(new Set(colorOptions)); // Ensure unique colors
+
+    // Đặt mặc định cho size và color là ?
+    this.selectedSize = this.sizeOptions[0]; // Default to 'S'
+    this.selectedColor = this.colorOptions[0] || 'default'; // Default to first color or 'default' if no colors
   }
 
-  //method overriding (this piece of code will overwrite the same code from parent class)
-  extraInfoHTML() {
-    //super.extraInfoHTML();
-    //console.log('Size Chart Link:', this.sizechartlink); //bugged.
+extraInfoHTML() {
+  let colorSection = '';
 
-    return `
-      <a href="${this.sizechartlink}" target="_blank">
-        Size chart
-      </a>
-    `
+  // Kiểm tra xem có màu nào không
+  if (this.colorOptions.length > 0) {
+    colorSection = `
+      <div>
+        <label for="color">Color:</label>
+        <div id="color-options" class="color-options">
+          ${this.colorOptions.map(color => {
+            // Kiểm tra nếu màu là beige, camo, yellow (màu sáng quá) thì áp dụng màu chữ đen
+            const textColorClass = ['beige', 'camo', 'yellow'].includes(color.toLowerCase()) ? 'black-text' : '';
+
+            return `
+              <button 
+                type="button" 
+                class="color-option-button ${textColorClass}" 
+                style="background-color: ${color};"
+                data-color="${color}" 
+                ${color === this.selectedColor ? 'class="selected"' : ''}
+              >
+                ${color}
+              </button>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  //bỏ cái sizechartlink luôn
+  return `
+    <!--
+    <a href="${this.sizechartlink}" target="_blank">
+      Size chart
+    </a>
+    -->
+    <div>
+      <label for="size">Size:</label>
+      <div id="size-options" class="size-options">
+        ${this.sizeOptions.map(size => {
+          return `
+            <button 
+              type="button" 
+              class="size-option-button" 
+              data-size="${size}" 
+              ${size === this.selectedSize ? 'class="selected"' : ''}
+            >
+              ${size}
+            </button>
+          `;
+        }).join('')}
+      </div>
+    </div>
+    ${colorSection}  <!-- Chỉ hiển thị phần này nếu có màu -->
+  `;
   }
 }
 
-//instructions link and warranty link:
-export class Appliance extends Product {
-  instructionslink;
-  warrantylink;
 
-  constructor(productDetails) {
-    super(productDetails);
 
-    //trả về địa chỉ kia, nếu tồn tại link image khả dụng. Nếu ko, trả lại empty string
-    this.instructionslink = productDetails.instructionslink.String ? `/${productDetails.instructionslink.String}` : '';
-    this.warrantylink = productDetails.warrantylink.String ? `/${productDetails.warrantylink.String}` : '';
-  }
-
-  extraInfoHTML() {
-    return `
-      <a href="${this.instructionslink}" target="_blank">
-        Instruction
-      </a>
-
-      <a href="${this.warrantylink}" target="_blank">
-        Warranty
-      </a>
-    `
-  }
-}
-
+// Product collection:
 export let products = [];
+
+// Load products using XMLHttpRequest
+export async function loadProducts(fun) {
+  try {
+    const response = await fetch('http://localhost:8082/api/products');
+    if (!response.ok) {
+      throw new Error(`Failed to load products. Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    products = data.map((productDetails) => {
+      if (productDetails.type === 'clothing') {
+        return new Clothing(productDetails);
+      }
+      return new Product(productDetails);
+    });
+
+    console.log('Products loaded successfully');
+    fun();
+  } catch (error) {
+    console.error('Error loading products:', error.message);
+  }
+}
 
 export function loadProductsFetch() {
   //make a GET request by default.
@@ -111,9 +166,9 @@ export function loadProductsFetch() {
       if(productDetails.type === 'clothing') {
         return new Clothing(productDetails);
       }
-      if(productDetails.type === 'appliance') {
-        return new Appliance(productDetails);
-      }
+      // if(productDetails.type === 'appliance') {
+      //   return new Appliance(productDetails);
+      // }
       return new Product(productDetails);
     });
 
@@ -124,32 +179,3 @@ export function loadProductsFetch() {
 
   return promise; 
 }
-
-//loadProductsFetch();
-
-export function loadProducts(fun) {
-  const xhr = new XMLHttpRequest();
-
-  xhr.addEventListener('load', () => {
-    products = JSON.parse(xhr.response).map((productDetails) => { 
-      if(productDetails.type === 'clothing') {
-        return new Clothing(productDetails);
-      }
-      if(productDetails.type === 'appliance') {
-        return new Appliance(productDetails);
-      }
-      return new Product(productDetails);
-    });
-    console.log('load products'); //console.log(products); it worked
-
-    fun();
-  });
-  xhr.addEventListener('error', (error) => {
-    console.log('Unexpected Error. Please try again later.');
-  });
-
-  xhr.open('GET', 'http://localhost:8082/api/products');
-  xhr.send(); //asynchronous, so it just send first, no response
-}
-
-

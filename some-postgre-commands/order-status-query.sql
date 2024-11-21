@@ -2,6 +2,15 @@ ALTER TABLE orders DROP COLUMN order_status
 
 ALTER TABLE orders ADD COLUMN order_status VARCHAR(20);
 
+-- mặc định order khi đặt sẽ luôn là "pending"
+ALTER TABLE orders
+ALTER COLUMN order_status SET DEFAULT 'Pending';
+
+
+--thuế máu 10% (quên chưa nhân lúc làm trước, phần backend)
+ALTER TABLE orders
+ALTER COLUMN order_status SET DEFAULT 'Pending';
+
 UPDATE orders o
 SET order_status = CASE WHEN NOT EXISTS (
     SELECT 1

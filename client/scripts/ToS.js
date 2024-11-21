@@ -4,8 +4,8 @@ const content = {
     header: "Terms of Service",
     sections: [
       {
-        title: "Cancelling an Order",
-        text: "You have up to <span class='highlight'>2 hours</span> to cancel your order after placing it. After this period, cancellations may not be guaranteed."
+        title: "Changing an Order",
+        text: "You have up to <span class='highlight'>2 hours</span> to change your order <span class='highlight'>once</span> after placing that order. After this period, further tries in changing the order may not be guaranteed."
       },
       {
         title: "Updating Personal Information",
@@ -25,8 +25,8 @@ const content = {
     header: "Điều khoản dịch vụ",
     sections: [
       {
-        title: "Hủy đơn hàng",
-        text: "Bạn có thể hủy đơn hàng trong vòng <span class='highlight'>2 giờ</span> sau khi đặt hàng. Sau thời gian này, việc hủy có thể không được đảm bảo."
+        title: "Sửa đơn hàng",
+        text: "Bạn có thể sửa đơn hàng <span class='highlight'>một lần<span> trong vòng <span class='highlight'>2 giờ</span> sau khi đặt hàng trong trường hợp bạn không may đặt nhầm một thứ gì đó. Sau thời gian này, việc sửa chữa lại đơn hàng có thể không được đảm bảo."
       },
       {
         title: "Cập nhật thông tin cá nhân",
@@ -46,8 +46,8 @@ const content = {
     header: "Terms of Service",
     sections: [
       {
-        title: "Cancelling an Order",
-        text: "You have <span class='highlight'>2 hours</span> after placing your order to cancel. Cancellations may not be accepted after this time."
+        title: "Fixing an Order",
+        text: "You have <span class='highlight'>2 hours</span> after placing your order to make any changes <span class='highlight'>once</span>. Further changes may not be accepted after this time."
       },
       {
         title: "Updating Personal Information",

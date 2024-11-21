@@ -156,6 +156,10 @@ func CreateOrder(w http.ResponseWriter, r *http.Request) {
 		orders = append(orders, order)
 	}
 
+
+	//Thuế máu 10%
+	orderCostCents = int(float64(orderCostCents) * 1.1) // Adding 10% tax
+
 	// Update the orders table with the accumulated total order cost
 	_, err = tx.Exec("UPDATE orders SET order_cost_cents = $1 WHERE order_id = $2", orderCostCents, orderID)
 	if err != nil {

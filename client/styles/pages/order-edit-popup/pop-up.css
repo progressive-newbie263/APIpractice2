@@ -1,0 +1,107 @@
+.popup-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  width: 90%;
+  max-width: 600px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  padding: 20px;
+}
+
+.popup-content h2 {
+  margin-top: 0;
+  text-align: center;
+  color: #333;
+}
+
+.products-list {
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 10px 0;
+}
+
+.product-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.product-image img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.product-info {
+  flex: 1;
+}
+
+.product-info .product-name {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+.product-info label {
+  display: block;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.product-info input {
+  width: 100px;
+  padding: 5px;
+  margin-left: 5px;
+}
+
+.popup-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.popup-actions button {
+  padding: 10px 15px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.popup-actions .add-product-button {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.popup-actions .update-order-button {
+  background-color: #4caf50;
+  color: white;
+}
+
+.popup-actions .close-popup-button {
+  background-color: #f44336;
+  color: white;
+}
+
+.popup-actions button:hover {
+  opacity: 0.9;
+}

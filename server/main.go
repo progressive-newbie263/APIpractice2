@@ -11,6 +11,7 @@ import (
 	//internal:
 	"server/API/accountHandler"
 	"server/API/adminHandler"
+	"server/API/productHandler/variants"
 	"server/API/orderHandler"
 	"server/API/productHandler"
 	"server/API/userHandler"
@@ -60,7 +61,8 @@ func handleRequests() {
 	myRouter.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("../admin/static"))))
 
 	//products API
-	myRouter.HandleFunc("/api/products", database.GetProductsHandler).Methods("GET")
+	//myRouter.HandleFunc("/api/products", database.GetProductsHandler).Methods("GET")
+	myRouter.HandleFunc("/api/products", variants.GetProductsWithVariantsHandler).Methods("GET")
 	myRouter.HandleFunc("/api/products/{id}", productHandler.SearchProductByIDHandler).Methods("GET")	//getting a specific product via searching its ID, finished successfully
 	myRouter.HandleFunc("/api/products/create", productHandler.CreateProductHandler).Methods("POST")		//posting/creating a brand new product, finished successfully
 	myRouter.HandleFunc("/api/products/update", productHandler.UpdateProductHandler).Methods("PUT")		//updating an existing product, finished successfully
@@ -86,7 +88,7 @@ func handleRequests() {
 
 	//orderAPI
 	//all-orders sẽ thuộc về phân trang admin.
-	myRouter.HandleFunc("/api/orders", orderHandler.CreateOrder).Methods("POST") //post cart ==> order. 
+	myRouter.HandleFunc("/api/orders", orderHandler.CreateOrder).Methods("POST") //post cart ==> order.
 
 	//lịch sử đơn hàng (phía admin). API này trả về mọi đơn hàng ở mọi trạng thái.
 	// endpoint này trả về đơn hàng pending. http://localhost:8082/api/all-orders?order_status=Pending
@@ -97,6 +99,7 @@ func handleRequests() {
 	//lịch sử đơn hàng, phía người xem.
 	// test; thêm ?order_id={orderId} vào: http://localhost:8082/api/order-details?order_id=Ig1cWE2tOMXzpC9mvfxo
 	myRouter.HandleFunc("/api/order-details", orderHandler.GetOrderDetails).Methods("GET") 
+	myRouter.HandleFunc("/api/order-details/update", orderHandler.UpdateOrderDetails).Methods("PUT") //cho phép người dùng chỉnh sửa order trong 2 tiếng. 
 	
 	//api này dùng để truy ra toàn bộ lịch sử order của 1 user. (phân trang: client.)
 	//chạy: http://localhost:8082/api/order-history?user_id=3&order_status=Pending (lưu ý, Pending và Delivered viết hoa do trong db nó thế.)
