@@ -13,9 +13,9 @@ const productsPerPage = 5; // 5 products per page
 // Fetch and display products from products API
 async function fetchProducts() {
   try {
-    const response = await fetch('http://localhost:8082/api/products');
+    const response = await fetch("http://localhost:8082/api/products");
     if (!response.ok) throw new Error("Failed to fetch products.");
-    
+
     products = await response.json();
     renderProductList(products);
   } catch (error) {
@@ -25,7 +25,7 @@ async function fetchProducts() {
 
 // Filter the products based on the search query
 function filterProducts(searchQuery) {
-  const filteredProducts = products.filter(product => 
+  const filteredProducts = products.filter((product) =>
     product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     product.keywords.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -46,6 +46,11 @@ function renderProductList(productArray) {
   productsToDisplay.forEach((product) => {
     const row = document.createElement("tr");
 
+    // Add the 'disabled-product' class if the product is inactive
+    if (!product.is_active) {
+      row.classList.add("disabled-product");
+    }
+
     row.innerHTML = `
       <td>${product.id}</td>
       <td><img class="zoom-out-image" src="/${product.image}" alt="${product.name}" width="50"></td>
@@ -55,19 +60,10 @@ function renderProductList(productArray) {
       <td>$${(product.pricecents / 100).toFixed(2)}</td>
       <td>${product.keywords}</td>
       <td>${product.type}</td>
-      
-      <!--
-      <td>${product.sizechartlink.String ? product.sizechartlink.String : 'No info'}</td>
-      <td>${product.instructionslink.String ? product.instructionslink.String : 'No info'}</td>
-      <td>${product.warrantylink.String ? product.warrantylink.String : 'No info'}</td>
-      -->
-
       <td>
-        <button class="edit-btn" data-id="${product.id}">
-          Edit
-        </button>
-        <button class="delete-btn" data-id="${product.id}">
-          Delete
+        <button class="edit-btn" data-id="${product.id}">Edit</button>
+        <button class="toggle-btn ${product.is_active ? '' : 'disabled'}" data-id="${product.id}">
+          ${product.is_active ? "Enabled" : "Disabled"}
         </button>
       </td>
     `;
@@ -102,30 +98,47 @@ searchProdButton.addEventListener("click", () => {
   filterProducts(searchQuery); // Fetch products based on search query
 });
 
-// Event for deleting/editing a product
+// Event for toggling/editing a product
 productList.addEventListener("click", (e) => {
   const productID = e.target.getAttribute("data-id");
-  
-  if (e.target.classList.contains("delete-btn")) {
-    const isConfirmed = window.confirm("Bạn có chắc muốn xoá sản phẩm không?");
-    
-    if (isConfirmed) {
-      deleteProduct(productID); // Call deleteProduct function if confirmed
-    }
+
+  if (e.target.classList.contains("toggle-btn")) {
+    showConfirmationDialog(productID); // Show confirmation before toggling status
   } else if (e.target.classList.contains("edit-btn")) {
     editProduct(productID); // Handle product edit
   }
 });
 
-// Delete product
-async function deleteProduct(productID) {
+// Show confirmation dialog before toggling product status
+function showConfirmationDialog(productID) {
+  const product = products.find((p) => p.id == productID);
+  if (!product) return;
+
+  // Update confirmation message based on product's is_active status
+  const confirmationMessage = product.is_active 
+    ? "Confirm to disable the product" 
+    : "Confirm to enable the product";
+
+  const confirmation = confirm(confirmationMessage);
+  if (confirmation) {
+    toggleProductStatus(productID); // If confirmed, toggle the product status
+  }
+}
+
+// Toggle product status
+async function toggleProductStatus(productID) {
   try {
-    const response = await fetch('/api/products/delete', {
-      method: 'DELETE',
+    const product = products.find((p) => p.id == productID);
+    if (!product) throw new Error("Product not found.");
+
+    const newStatus = !product.is_active;
+
+    const response = await fetch("/api/products/toggle", {
+      method: "PUT",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ id: productID }),
+      body: JSON.stringify({ id: productID, is_active: newStatus }),
     });
 
     if (!response.ok) {
@@ -133,38 +146,58 @@ async function deleteProduct(productID) {
       throw new Error(errorText);
     }
 
-    console.log("Sản phẩm xoá thành công!");
-    alert("Sản phẩm được xoá thành công");
+    // Show success message
+    showToastMessage(`Product has been ${newStatus ? "enabled" : "disabled"} successfully ✅`);
 
-    // Remove deleted product from local products array and re-render the list
-    products = products.filter(product => product.id !== productID);
+    // Update the product status locally
+    product.is_active = newStatus;
     renderProductList(products);
-
   } catch (error) {
-    console.error('Error:', error);
-    alert(`Failed to delete product: ${error.message}`);
+    console.error("Failed to toggle product status:", error);
+    alert(`Error: ${error.message}`);
   }
+}
+
+// Show success message at the top-right corner
+function showToastMessage(message) {
+  const toast = document.createElement("div");
+  toast.className = "toast-message";
+  
+  const messageText = document.createElement("p");
+  messageText.innerText = message;
+  toast.appendChild(messageText);
+  
+  const progressBar = document.createElement("div");
+  progressBar.className = "progress-bar";
+  toast.appendChild(progressBar);
+
+  document.body.appendChild(toast);
+
+  // Start the progress bar animation
+  setTimeout(() => {
+    progressBar.style.width = "0%"; // Thanh tiến trình thu lại trong vòng 5 giây
+  }, 10);
+
+  // After 5 seconds, hide the toast and progress bar
+  setTimeout(() => {
+    toast.classList.add("hide"); // Thêm class 'hide' để kích hoạt thu lại
+  }, 3000);
+
+  // Remove the toast after 5.5 seconds to ensure animation completes
+  setTimeout(() => {
+    toast.remove(); // Xóa toast khi hết thời gian
+  }, 3000);
 }
 
 // Edit product
 function editProduct(productID) {
-  // Find the product from the products array
-  const product = products.find(p => p.id == productID);
-  
+  const product = products.find((p) => p.id == productID);
+
   if (!product) {
     console.error("Product not found");
     return;
   }
 
-  // Helper function to clean up the values
-  function cleanValue(value) {
-    if (!value || value === 'No info' || typeof value === 'object') {
-      return ''; // Return empty string for null, 'no info', or [object Object]
-    }
-    return value;
-  }
-
-  // Populate the form with the cleaned product details
   document.getElementById("productImage").value = product.image;
   document.getElementById("productName").value = product.name;
   document.getElementById("productRating").value = product.ratingstars;
@@ -172,27 +205,19 @@ function editProduct(productID) {
   document.getElementById("productPrice").value = product.pricecents;
   document.getElementById("productKeywords").value = product.keywords;
   document.getElementById("productType").value = product.type;
-  
-  // document.getElementById("sizeChartLink").value = cleanValue(product.sizechartlink);
-  // document.getElementById("instructionsLink").value = cleanValue(product.instructionslink);
-  // document.getElementById("warrantyLink").value = cleanValue(product.warrantylink);
 
-  // Change the form title and submit button text to indicate editing mode
   formTitle.innerHTML = "Edit Product";
   submitBtn.value = "Update Product";
-  
-  // Store the product ID in a hidden field or global variable to use when submitting
+
   editingProduct = productID;
 }
 
+// Add product form submission (create or update)
+productForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
 
-// Add product form submission (for both create and update)
-document.getElementById("addProductForm").addEventListener("submit", async (event) => {
-  event.preventDefault(); // Prevent page refresh on form submit
-
-  // Collect form data
   const productData = {
-    id: editingProduct, // Use the product ID stored when editing
+    id: editingProduct,
     image: document.getElementById("productImage").value,
     name: document.getElementById("productName").value,
     ratingstars: parseFloat(document.getElementById("productRating").value),
@@ -200,31 +225,27 @@ document.getElementById("addProductForm").addEventListener("submit", async (even
     pricecents: parseInt(document.getElementById("productPrice").value),
     keywords: document.getElementById("productKeywords").value,
     type: document.getElementById("productType").value,
-    // sizechartlink: document.getElementById("sizeChartLink").value || null,
-    // instructionslink: document.getElementById("instructionsLink").value || null,
-    // warrantylink: document.getElementById("warrantyLink").value || null,
   };
 
-  const method = editingProduct ? "PUT" : "POST"; // If editing, use PUT; otherwise, POST
-  const url = editingProduct ? `/api/products/update` : `/api/products/create`;
+  const method = editingProduct ? "PUT" : "POST";
+  const url = editingProduct
+    ? "/api/products/update"
+    : "/api/products/create";
 
   try {
     const response = await fetch(url, {
-      method: method,
-      headers: {
-        "Content-Type": "application/json",
-      },
+      method,
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(productData),
     });
 
-    // Directly update and display the product list after successful update or creation
     if (response.ok) {
-      alert(`${editingProduct ? 'Product updated' : 'Product created'} successfully!`);
-      document.getElementById("addProductForm").reset(); 
-      fetchProducts(); // Reload the products list after updating or creating
-      editingProduct = null; // Reset editingProduct
-      formTitle.innerHTML = "Add Product"; // Reset form title
-      submitBtn.value = "Add Product"; // Reset button text
+      alert(`${editingProduct ? "Product updated" : "Product created"} successfully!`);
+      productForm.reset();
+      fetchProducts();
+      editingProduct = null;
+      formTitle.innerHTML = "Add Product";
+      submitBtn.value = "Add Product";
     } else {
       const errorMessage = await response.text();
       alert(`Error: ${errorMessage}`);

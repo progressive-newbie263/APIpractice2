@@ -81,8 +81,6 @@ td {
   background-color: #fff;
 }
 
-
-
 tr:hover {
   background-color: #f7f7f7;
   cursor: pointer;
@@ -92,11 +90,18 @@ img {
   border-radius: 5px;
 }
 
+
+
+
+/*
+  CSS cho các button
+*/
 .edit-btn, 
-.delete-btn,
 .edit-btn-user,
-.delete-btn-user {
-  width: 70px;
+.delete-btn-user,
+.toggle-btn {
+  margin-right: -25px;
+  width: 100px;
   padding: 8px 16px;
   color: white;
   border: none;
@@ -117,17 +122,15 @@ img {
   background-color:  #20DE60;
 }
 
-.delete-btn, 
-.delete-btn-user {
-  background-color: #d9534f;
-}
-
 .edit-btn:hover,
 .edit-btn-user:hover {
   background-color: #27a61e;
 }
 
-.delete-btn:hover,
+.delete-btn-user {
+  background-color: #d9534f;
+}
+
 .delete-btn-user:hover {
   background-color: #c9302c;
 }
@@ -137,6 +140,28 @@ img {
   gap: 8px;
 }
 
+/* Khi sản phẩm đang enable (isDisabled = false) */
+.toggle-btn:not(.disabled) {
+  background-color: #3498db; /* Màu xanh dương */
+}
+
+/* Khi sản phẩm đang disable (isDisabled = true) */
+.toggle-btn.disabled {
+  background-color: #e74c3c; /* Màu đỏ */
+}
+
+/* Khi hover lên button */
+.toggle-btn:hover {
+  opacity: 0.8;
+}
+
+
+
+
+
+/*
+ CSS cho layer của form
+*/
 .form-section {
   margin-top: 40px;
   padding: 20px;
@@ -289,4 +314,53 @@ footer {
   background-color: #232f3e;
   color: white;
   font-size: 14px;
+}
+
+/*
+ làm mở sản phẩm đi.
+*/
+.disabled-product {
+  opacity: 0.5; 
+}
+
+
+/*
+  tin nhắn hiển thị việc cập nhật disable/enable
+*/
+.toast-message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: white; /* Nền xám */
+  color: green; /* Chữ đen */
+  padding: 20px;
+  border-radius: 5px;
+  border: 2px solid green; /* Viền xanh lá */
+  font-size: 16px; /* Tăng kích thước chữ */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Thêm bóng mờ */
+  max-width: 400px;
+  width: 100%;
+  z-index: 9999;
+}
+
+.toast-message p {
+  margin: 0;
+  font-weight: bold; /* Làm đậm chữ */
+}
+
+/* Thanh trượt dưới message */
+/* Thanh tiến trình dưới message */
+.toast-message .progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  background-color: green; /* Màu xanh lá cho thanh tiến trình */
+  width: 100%; /* Bắt đầu ở full width */
+  transition: width 3s linear; /* Hiệu ứng thu lại trong 5 giây */
+}
+
+/* Thanh tiến trình khi kết thúc */
+.toast-message.hide .progress-bar {
+  width: 0%; /* Thu lại hết trong vòng 5 giây */
 }

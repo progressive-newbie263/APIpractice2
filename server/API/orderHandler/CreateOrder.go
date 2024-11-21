@@ -99,6 +99,7 @@ func CreateOrder(w http.ResponseWriter, r *http.Request) {
 			&product.SizeChartLink,
 			&product.InstructionsLink,
 			&product.WarrantyLink,
+			&product.IsActive,
 		)
 		if err != nil {
 			tx.Rollback() // Rollback if product not found

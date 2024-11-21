@@ -20,8 +20,12 @@ function renderProductsGrid(filteredProducts) {
   const productsToRender = filteredProducts || products;
 
   productsToRender.forEach((product) => {
+    // Thêm lớp inactive để vô hiệu hoá sản phẩm, nếu nó là false.
+    const isInactive = !product.is_active; 
+    const productClass = isInactive ? 'inactive' : ''; 
+
     productsHTML += `
-      <div class="product-container">
+      <div class="product-container ${productClass}">
       <div class="product-image-container">
         <img class="product-image" src="../${product.image}">
       </div>

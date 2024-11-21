@@ -25,6 +25,7 @@ type Product struct {
 	SizeChartLink    sql.NullString `json:"sizechartlink"`
 	InstructionsLink sql.NullString `json:"instructionslink"`
 	WarrantyLink     sql.NullString `json:"warrantylink"`
+	IsActive            bool    `json:"is_active"`
 }
 
 // Custom function to generate UUID similar to JavaScript's generateUUID()
@@ -72,8 +73,9 @@ func CreateProduct(product *Product) error {
 			type,
 			sizechartlink,
 			instructionslink,
-			warrantylink 
-		) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+			warrantylink,
+			is_active 
+		) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
 	`
 	_, err := database.DB.Exec(
 		query,
@@ -88,6 +90,7 @@ func CreateProduct(product *Product) error {
 		product.SizeChartLink,
 		product.InstructionsLink,
 		product.WarrantyLink,
+		product.IsActive,
 	)
 
 	if err != nil {

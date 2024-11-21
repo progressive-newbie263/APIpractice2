@@ -21,6 +21,7 @@ export class Product {
   pricecents;
   keywords;
   type;
+  is_active;
 
   constructor(productDetails) {
     this.id = productDetails.id;
@@ -30,6 +31,7 @@ export class Product {
     this.ratingcount = productDetails.ratingcount;
     this.pricecents = productDetails.pricecents;
     this.keywords = productDetails.keywords;
+    this.is_active = productDetails.is_active; 
   }
 
   getStarsUrl() {

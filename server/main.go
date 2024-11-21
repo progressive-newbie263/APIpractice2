@@ -111,6 +111,9 @@ func handleRequests() {
 	myRouter.HandleFunc("/api/update-location", accountHandler.UpdateLocation).Methods("PUT")
 	myRouter.HandleFunc("/api/update-password", accountHandler.UpdatePassword).Methods("PUT")
 
+	//vô hiệu hoá/ tắt 1 sản phẩm:
+	myRouter.HandleFunc("/api/products/toggle", productHandler.ToggleProductStatusHandler).Methods("PUT")
+
 
 	//middleware code which allows connections to database from outer source (?)
 	c := cors.New(cors.Options{

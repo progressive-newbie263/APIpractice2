@@ -34,6 +34,7 @@ type Product struct {
     SizeChartLink       sql.NullString  `json:"sizechartlink"`
     InstructionsLink    sql.NullString  `json:"instructionslink"`
     WarrantyLink        sql.NullString  `json:"warrantylink"`
+    IsActive            bool    `json:"is_active"`
 }
 
 //function for searching products via keywords (in amazon.html)
@@ -51,7 +52,8 @@ func SearchProducts(query string) ([]Product, error) {
             type, 
             sizechartlink, 
             instructionslink, 
-            warrantylink 
+            warrantylink,
+            is_active 
         FROM products
         WHERE keywords ILIKE $1
     `
@@ -76,6 +78,7 @@ func SearchProducts(query string) ([]Product, error) {
             &product.SizeChartLink, 
             &product.InstructionsLink, 
             &product.WarrantyLink,
+            &product.IsActive,
         )
         if err != nil {
             return nil, err
@@ -102,7 +105,8 @@ func GetProductsHandler(w http.ResponseWriter, r *http.Request) {
             type,
             sizechartlink,
             instructionslink,
-            warrantylink 
+            warrantylink,
+            is_active 
         FROM products
     `)
     if err != nil {
@@ -125,7 +129,8 @@ func GetProductsHandler(w http.ResponseWriter, r *http.Request) {
             &product.Type,
             &product.SizeChartLink,
             &product.InstructionsLink,
-            &product.WarrantyLink, 
+            &product.WarrantyLink,
+            &product.IsActive, 
         )
         if err != nil {
             http.Error(w, "Failed to scan row", http.StatusInternalServerError)
@@ -156,7 +161,8 @@ func SearchProductByID(productID string) (*Product, error) {
         type,
         sizechartlink,
         instructionslink,
-        warrantylink 
+        warrantylink,
+        is_active 
     FROM products WHERE id = $1`
 
     err := DB.QueryRow(query, productID).Scan(
@@ -170,7 +176,8 @@ func SearchProductByID(productID string) (*Product, error) {
         &product.Type,
         &product.SizeChartLink,
         &product.InstructionsLink,
-        &product.WarrantyLink, 
+        &product.WarrantyLink,
+        &product.IsActive, 
     )
     if err != nil {
         if err == sql.ErrNoRows {

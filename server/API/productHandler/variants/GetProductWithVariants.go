@@ -21,6 +21,7 @@ type ProductWithVariants struct {
 	SizeChartLink    sql.NullString    `json:"sizechartlink"`
 	InstructionsLink sql.NullString    `json:"instructionslink"`
 	WarrantyLink     sql.NullString    `json:"warrantylink"`
+	IsActive         bool    `json:"is_active"`
 	Variants         []ClothingVariant `json:"variants"`
 }
 
@@ -45,6 +46,7 @@ func GetProductsWithVariantsHandler(w http.ResponseWriter, r *http.Request) {
             p.sizechartlink, 
             p.instructionslink, 
             p.warrantylink,
+						p.is_active,
             pc.size, 
             pc.color, 
             pc.colored_image
@@ -71,10 +73,12 @@ func GetProductsWithVariantsHandler(w http.ResponseWriter, r *http.Request) {
 		var productID, image, name, keywords, productType string
 		var size, color, coloredImage sql.NullString
 		var ratingStars float64
+		var IsActive bool
 		var ratingCount, priceCents int
 		var sizeChartLink, instructionsLink, warrantyLink sql.NullString
 
-		err := rows.Scan(&productID, &image, &name, &ratingStars, &ratingCount, &priceCents, &keywords, &productType, &sizeChartLink, &instructionsLink, &warrantyLink, &size, &color, &coloredImage)
+		err := rows.Scan(&productID, &image, &name, &ratingStars, &ratingCount, &priceCents, &keywords, &productType, 
+			&sizeChartLink, &instructionsLink, &warrantyLink, &IsActive, &size, &color, &coloredImage)
 		if err != nil {
 			http.Error(w, "Failed to parse rows", http.StatusInternalServerError)
 			log.Println("Row Scan Error:", err)
@@ -95,6 +99,7 @@ func GetProductsWithVariantsHandler(w http.ResponseWriter, r *http.Request) {
 				SizeChartLink:    sizeChartLink,
 				InstructionsLink: instructionsLink,
 				WarrantyLink:     warrantyLink,
+				IsActive: 				IsActive,	
 				Variants:         []ClothingVariant{},
 			}
 		}

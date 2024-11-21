@@ -240,3 +240,26 @@ select {
 .color-option-button.black-text {
   color: black;
 }
+
+
+/*
+  làm mờ sản phẩm bị vô hiệu hoá:
+  
+  Không cho phép người dùng tương tác với các sản phẩm bị vô hiệu hoá ấy.
+*/
+.inactive {
+  pointer-events: none; /* Vô hiệu hóa sự kiện chuột */
+  cursor: not-allowed; /* Thay đổi con trỏ chuột */
+  background-color: #f0f0f0; /* Màu nền sáng hơn */
+  border: 2px solid #ff4d4d; /* Thêm border nhẹ */
+  position: relative; /* Để cho phép thêm thông báo ở vị trí tuyệt đối */
+  filter: blur(3px); /* Thêm hiệu ứng mờ cho phần tử chính */
+  opacity: 0.5; /* Giảm độ mờ của toàn bộ phần tử */
+}
+
+.inactive:hover {
+  background-color: #f0f0f0; /* Không thay đổi màu nền khi hover */
+  box-shadow: none; /* Không có bóng mờ khi hover */
+  filter: none; /* Không áp dụng mờ khi hover */
+}
+
